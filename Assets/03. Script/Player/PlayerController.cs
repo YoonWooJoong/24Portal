@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -22,6 +23,11 @@ public class PlayerController : MonoBehaviour
     private Vector2 mouseDelte;
 
     private Rigidbody _rigidbody;
+
+    /// <summary>
+    /// 좌 혹은 우 클릭시 실행
+    /// </summary>
+    public Action portalAction;
 
     private void Awake()
     {
@@ -60,6 +66,28 @@ public class PlayerController : MonoBehaviour
         transform.eulerAngles += new Vector3(0, mouseDelte.x * lookSensitivity, 0);
     }
 
+    private bool IsGround()
+    {
+        Ray[] rays = new Ray[4]
+        {
+            new Ray(transform.position + (transform.forward * 0.2f) + (transform.up * 0.01f), Vector3.down),
+            new Ray(transform.position + (-transform.forward * 0.2f) + (transform.up * 0.01f), Vector3.down),
+            new Ray(transform.position + (transform.right * 0.2f) + (transform.up * 0.01f), Vector3.down),
+            new Ray(transform.position + (-transform.right * 0.2f) + (transform.up * 0.01f), Vector3.down)
+        };
+
+
+        for (int i = 0; i < rays.Length; i++)
+        {
+            if (Physics.Raycast(rays[i], 0.1f, groundLayerMask))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void OnMove(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -85,8 +113,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnAction(InputAction.CallbackContext context)
+    public void OnLeftClick(InputAction.CallbackContext context)
     {
+        if (context.phase == InputActionPhase.Started)
+        {
+            //좌클릭 행동 //다른 클래스로 갈 수도 있음
+            Debug.Log("left click");
+            portalAction?.Invoke();
+        }
+    }
 
+    public void OnRightClick(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            //우클릭 행동 //다른 클래스로 갈 수도 있음
+            Debug.Log("right click"); 
+            portalAction?.Invoke();
+        }
     }
 }
