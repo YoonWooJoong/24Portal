@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     }
 
     public StageChanger stageChanger;
+    [SerializeField] public GameObject StartPosition;
+
     private void Awake()
     {
         if (instance == null)

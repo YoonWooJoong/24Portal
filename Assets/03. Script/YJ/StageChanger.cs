@@ -18,6 +18,11 @@ public class StageChanger : MonoBehaviour
         else { Debug.LogWarning("다음씬이 없습니다."); }
     }
 
+    public void LoadScene(int buildindex)
+    {
+        SceneManager.LoadScene(buildindex);
+    }
+
     public void GoFirstScene()
     {
         SceneManager.LoadScene(0);
