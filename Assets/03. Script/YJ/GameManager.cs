@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour
     }
 
     public StageChanger stageChanger;
+    public GameObject playerPrefab;
+    public GameObject StartPosition;
+
     private void Awake()
     {
         if (instance == null)
@@ -37,6 +40,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         stageChanger = GetComponentInChildren<StageChanger>();
+        Instantiate(playerPrefab, StartPosition.transform.position, Quaternion.identity);
     }
 
 }

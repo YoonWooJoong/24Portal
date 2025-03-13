@@ -6,11 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class StageChanger : MonoBehaviour
 {
+    /// <summary>
+    /// ¾À Àç½ÃÀÛ
+    /// </summary>
     public void RestartScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    /// <summary>
+    /// ´ÙÀ½¾ÀÀÌµ¿
+    /// ´ÙÀ½¾ÀÀÌ¾øÀ¸¸é ·Î±×Ãâ·Â
+    /// </summary>
     public void NextScene()
     {
         if (Application.CanStreamedLevelBeLoaded(SceneManager.GetActiveScene().buildIndex + 1))
@@ -18,6 +25,18 @@ public class StageChanger : MonoBehaviour
         else { Debug.LogWarning("´ÙÀ½¾ÀÀÌ ¾ø½À´Ï´Ù."); }
     }
 
+    /// <summary>
+    /// ÀúÀåµÈ ¾À ºÒ·¯¿À±â
+    /// </summary>
+    /// <param name="buildindex">ÀúÀåµÈ¾À ÀÎµ¦½º</param>
+    public void LoadScene(int buildindex)
+    {
+        SceneManager.LoadScene(buildindex);
+    }
+
+    /// <summary>
+    /// ¸Ç Ã³À½ ¾ÀÀ¸·Î ÀÌµ¿
+    /// </summary>
     public void GoFirstScene()
     {
         SceneManager.LoadScene(0);
