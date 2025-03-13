@@ -6,7 +6,7 @@ public class StartPoint : MonoBehaviour
 {
     void Awake()
     {
-        GameManager.Instance.StartPosition = this.gameObject;
+        GameManager.Instance.startPosition = this.gameObject;
     }
 
 

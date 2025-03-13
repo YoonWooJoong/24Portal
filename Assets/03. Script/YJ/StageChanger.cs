@@ -41,4 +41,13 @@ public class StageChanger : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
+    /// <summary>
+    /// 선택한 씬을 불러오는 역할
+    /// </summary>
+    /// <param name="index"></param>
+    public void ChoiceScene(int index)
+    {
+        SceneManager.LoadScene(index);
+    }
 }

@@ -16,10 +16,9 @@ public class GameManager : MonoBehaviour
             return instance;
         }
     }
-
     public StageChanger stageChanger;
     public GameObject playerPrefab;
-    public GameObject StartPosition;
+    public GameObject startPosition;
 
     private void Awake()
     {
@@ -39,8 +38,14 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        playerPrefab = Resources.Load<GameObject>("Player");
+        StageChanger changerObject = new GameObject("StageChanger").AddComponent<StageChanger>();
+        changerObject.transform.SetParent(transform);
         stageChanger = GetComponentInChildren<StageChanger>();
-        Instantiate(playerPrefab, StartPosition.transform.position, Quaternion.identity);
+        if (playerPrefab != null)
+            Instantiate(playerPrefab, startPosition.transform.position, Quaternion.identity);
+        else
+            Debug.Log("플레이어 프리팹이 없습니다.");
     }
 
 }
