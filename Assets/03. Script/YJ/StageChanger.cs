@@ -21,8 +21,17 @@ public class StageChanger : MonoBehaviour
     public void NextScene()
     {
         if (Application.CanStreamedLevelBeLoaded(SceneManager.GetActiveScene().buildIndex + 1))
+        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            StartCoroutine(SpawnPlayerDelay());
+        }
+
         else { Debug.LogWarning("다음씬이 없습니다."); }
+    }
+    IEnumerator SpawnPlayerDelay()
+    {
+        yield return new WaitForSeconds(0.1f);
+        GameManager.Instance.PlayerCreate();
     }
 
     /// <summary>

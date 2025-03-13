@@ -42,6 +42,14 @@ public class GameManager : MonoBehaviour
         StageChanger changerObject = new GameObject("StageChanger").AddComponent<StageChanger>();
         changerObject.transform.SetParent(transform);
         stageChanger = GetComponentInChildren<StageChanger>();
+        PlayerCreate();
+    }
+
+    public void PlayerCreate()
+    {
+        Debug.Log(playerPrefab);
+        Debug.Log("캐릭터 생성");
+        Debug.Log(startPosition.gameObject.transform.position);
         if (playerPrefab != null)
             Instantiate(playerPrefab, startPosition.transform.position, Quaternion.identity);
         else
