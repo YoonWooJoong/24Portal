@@ -156,13 +156,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: portal 2 button
       objectReference: {fileID: 0}
+    - target: {fileID: 4525050583179919030, guid: 3267b587efd39ca498dfe1ea095a6e9a, type: 3}
+      propertyPath: door_object
+      value: 
+      objectReference: {fileID: 7623396835921362438}
     - target: {fileID: 7978263940569366530, guid: 3267b587efd39ca498dfe1ea095a6e9a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.2582955
       objectReference: {fileID: 0}
     - target: {fileID: 7978263940569366530, guid: 3267b587efd39ca498dfe1ea095a6e9a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.332
+      value: -2.34
       objectReference: {fileID: 0}
     - target: {fileID: 7978263940569366530, guid: 3267b587efd39ca498dfe1ea095a6e9a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -266,6 +270,11 @@ PrefabInstance:
 --- !u!4 &1240769926776907566 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2224243949617606734, guid: 419ec54f2a569a14a86f0c4d30ba3885, type: 3}
+  m_PrefabInstance: {fileID: 1145607255887091552}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7623396835921362438 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7362748442297198950, guid: 419ec54f2a569a14a86f0c4d30ba3885, type: 3}
   m_PrefabInstance: {fileID: 1145607255887091552}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2459803470853556372

@@ -5,7 +5,13 @@ using UnityEngine;
 public class Door : MonoBehaviour
 {
     public Animator anim;
-    public bool isOpen;
+    bool isOpen;
+    public bool IsOpen
+    {
+        get { return isOpen; }
+        set { isOpen = value; }
+    }
+
 
     void Start()
     {
