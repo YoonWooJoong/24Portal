@@ -5,13 +5,11 @@ using UnityEngine;
 
 public class Portal : MonoBehaviour
 {
-    public Transform otherPortal;
-    public float teleportOffset = 1.0f;
+    public Transform otherPortal;    
     public int recursionLimit = 3; // 최대 재귀 깊이
     public Camera portalCamera; // 포탈 카메라
-    public RenderTexture portalTexture; // 렌더 텍스처
-    public float teleportDuration = 0.4f; // 텔레포트 지속 시간 (초)
-    public float teleportDelay = 0.2f;  // 텔레포트 딜레이 시간 (초)
+    public float cameraForwardOffset = 1.5f;
+    public RenderTexture portalTexture; // 렌더 텍스처   
 
 
     private static int currentRecursionDepth = 0; // 현재 재귀 깊이
@@ -74,47 +72,47 @@ public class Portal : MonoBehaviour
         Vector3 localPosition = transform.InverseTransformPoint(player.position);
 
         // 2. 새로운 위치 계산
-        Vector3 newPosition = otherPortal.TransformPoint(localPosition);
+        Vector3 newPosition = otherPortal.TransformPoint(-localPosition);
 
         // 3. 위치 보정
-        newPosition += otherPortal.forward * teleportOffset;
+        newPosition += otherPortal.forward * 1f; // teleportOffset 이 삭제되었으므로 1f 로 하드 코딩
 
-        float yOffset = 2f;
+        // 카메라 앞쪽으로 이동
+        Transform currentCameraTransform = portalCamera.transform;
+        newPosition += currentCameraTransform.forward * cameraForwardOffset;
+
+        float yOffset = 0.2f;
+        float xOffset = 0.6f;
         RaycastHit hit;
         if (Physics.Raycast(newPosition, Vector3.down, out hit, 10f))
         {
             newPosition.y = hit.point.y + yOffset;
+            newPosition.x = hit.point.x + xOffset;
         }
         else
         {
             Debug.LogWarning("레이캐스트 실패: 안전을 위해 기본 높이 사용");
             newPosition.y += yOffset;
         }
-
-        // ***** [수정 시작] 텔레포트 시켜줄 포탈의 카메라 방향으로 설정 *****
-        // 1. 현재 포탈의 카메라 Transform 가져오기
-        Transform currentCameraTransform = portalCamera.transform;
-
-        // 2. 새로운 회전 설정
         Quaternion newRotation = currentCameraTransform.rotation;
-        // ***** [수정 끝] *****
 
         // 위치 및 회전 적용
         rb.position = newPosition;
         player.rotation = newRotation;
 
         // 5. 충돌 방지 (레이어 사용)
-        player.gameObject.layer = LayerMask.NameToLayer("Teleporting"); // "Teleporting" 레이어 생성 필요
-        yield return new WaitForSeconds(0.05f); // 짧은 시간 동안 충돌 무시
+        player.gameObject.layer = LayerMask.NameToLayer("Teleporting");
+        yield return new WaitForSeconds(0.8f);
         player.gameObject.layer = LayerMask.NameToLayer("Default");
 
-        // 딜레이 시간 동안 대기
-        yield return new WaitForSeconds(teleportDelay);
+        // 6. 딜레이 시간 동안 대기
+        yield return new WaitForSeconds(0.1f);
 
         // 속도 다시 적용
         rb.velocity = previousVelocity;
         rb.angularVelocity = previousAngularVelocity;
 
+        yield return new WaitForSeconds(0.8f);
         canTeleport = true;
     }
 
