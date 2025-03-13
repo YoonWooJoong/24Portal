@@ -61,11 +61,11 @@ public class PlayerController : MonoBehaviour
         dir *= moveSpeed;
         if(dir.magnitude > 0.2f)
         {
-           //_animator.SetBool("IsMoving", true);
+           _animator.SetBool("IsMoving", true);
         } 
         else
         {
-            //_animator.SetBool("IsMoving", false);
+            _animator.SetBool("IsMoving", false);
         }
 
         dir.y = _rigidbody.velocity.y;
