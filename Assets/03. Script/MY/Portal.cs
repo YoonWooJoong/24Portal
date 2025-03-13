@@ -10,6 +10,7 @@ public class Portal : MonoBehaviour
     public Camera portalCamera; // 포탈 카메라
     public float cameraForwardOffset = 1.5f;
     public RenderTexture portalTexture; // 렌더 텍스처   
+    public LayerMask teleportLayerMask; // 텔레포트 가능한 레이어 마스크
 
 
     private static int currentRecursionDepth = 0; // 현재 재귀 깊이
@@ -33,7 +34,7 @@ public class Portal : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && canTeleport)
+        if (canTeleport && (teleportLayerMask.value & (1 << other.gameObject.layer)) != 0)
         {
             TeleportPlayer(other.transform);
         }
@@ -103,7 +104,7 @@ public class Portal : MonoBehaviour
         // 5. 충돌 방지 (레이어 사용)
         player.gameObject.layer = LayerMask.NameToLayer("Teleporting");
         yield return new WaitForSeconds(0.8f);
-        player.gameObject.layer = LayerMask.NameToLayer("Default");
+        player.gameObject.layer = LayerMask.NameToLayer("Player");
 
         // 6. 딜레이 시간 동안 대기
         yield return new WaitForSeconds(0.1f);

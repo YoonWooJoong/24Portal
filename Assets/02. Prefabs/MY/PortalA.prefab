@@ -194,6 +194,9 @@ MonoBehaviour:
   portalCamera: {fileID: 7227434828344805425}
   cameraForwardOffset: 1.5
   portalTexture: {fileID: 8400000, guid: 0bfaa5cfc07df05448b5e27feadbe327, type: 2}
+  teleportLayerMask:
+    serializedVersion: 2
+    m_Bits: 9216
 --- !u!65 &8139657674336790922
 BoxCollider:
   m_ObjectHideFlags: 0
