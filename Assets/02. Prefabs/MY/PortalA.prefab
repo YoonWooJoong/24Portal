@@ -75,7 +75,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1271
+    m_Bits: 3575
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -190,12 +190,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   otherPortal: {fileID: 1890067651490140428, guid: 86321ffc5d350e645a73264b88441a94, type: 3}
-  teleportOffset: 1
   recursionLimit: 5
   portalCamera: {fileID: 7227434828344805425}
+  cameraForwardOffset: 1.5
   portalTexture: {fileID: 8400000, guid: 0bfaa5cfc07df05448b5e27feadbe327, type: 2}
-  teleportDuration: 0.4
-  teleportDelay: 0.1
 --- !u!65 &8139657674336790922
 BoxCollider:
   m_ObjectHideFlags: 0

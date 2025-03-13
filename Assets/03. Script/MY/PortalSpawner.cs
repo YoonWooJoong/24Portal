@@ -8,7 +8,8 @@ public class PortalSpawner : MonoBehaviour
 {    
     public GameObject portalAPrefab; 
     public GameObject portalBPrefab; 
-    public float maxSpawnDistance = 100f;    
+    public float maxSpawnDistance = 100f;
+    public LayerMask portalSpawnLayer;
 
     public GameObject portalA;
     public GameObject portalB;   
@@ -29,31 +30,27 @@ public class PortalSpawner : MonoBehaviour
     public void SpawnPortal(ref GameObject portal, GameObject prefab)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, maxSpawnDistance))
-        {
+        RaycastHit hitAll; 
+        RaycastHit hitPortalLayer; 
+        
+        bool hasHitAll = Physics.Raycast(ray, out hitAll, maxSpawnDistance);       
+        bool hasHitPortalLayer = Physics.Raycast(ray, out hitPortalLayer, maxSpawnDistance, portalSpawnLayer);
+        
+        if (hasHitPortalLayer && (!hasHitAll || hitPortalLayer.distance <= hitAll.distance))
+        {            
             if (portal != null)
             {
                 Destroy(portal);
             }
-            Vector3 spawnPosition = hit.point + hit.normal * 0.01f;
-
-            // 포탈 생성 및 변수 할당
+            Vector3 spawnPosition = hitPortalLayer.point + hitPortalLayer.normal * 0.01f;            
             GameObject newPortal = Instantiate(prefab, spawnPosition, Quaternion.identity);
             portal = newPortal;
 
             Portal portalScript = newPortal.GetComponent<Portal>();
 
             Quaternion additionalRotation = Quaternion.Euler(90f, 0f, 0f);
-            portal.transform.rotation = Quaternion.LookRotation(hit.normal) * additionalRotation;
+            portal.transform.rotation = Quaternion.LookRotation(hitPortalLayer.normal) * additionalRotation;
             ConnectPortals();
-
-            // 포탈이 모두 생성되었으면 연결
-            if (portalA != null && portalB != null)
-            {
-                ConnectPortals();
-            }
         }
         else
         {
