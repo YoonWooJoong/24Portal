@@ -1,9 +1,10 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class PortalSpawner : MonoBehaviour
 {    
     public GameObject portalAPrefab; 
     public GameObject portalBPrefab; 
@@ -36,14 +37,10 @@ public class NewBehaviourScript : MonoBehaviour
             {
                 Destroy(portal);
             }
+            Vector3 spawnPosition = hit.point + hit.normal * 0.01f;
 
-
-            float zOffset = 0.3f;
-            float xOffset = 0.4f;
-            Vector3 spawnPosition = hit.point + new Vector3(xOffset, 0f, zOffset);
-
-            // Æ÷Å» »ı¼º ¹× º¯¼ö ÇÒ´ç
-            GameObject newPortal = Instantiate(prefab, hit.point, Quaternion.identity);
+            // í¬íƒˆ ìƒì„± ë° ë³€ìˆ˜ í• ë‹¹
+            GameObject newPortal = Instantiate(prefab, spawnPosition, Quaternion.identity);
             portal = newPortal;
 
             Portal portalScript = newPortal.GetComponent<Portal>();
@@ -52,7 +49,7 @@ public class NewBehaviourScript : MonoBehaviour
             portal.transform.rotation = Quaternion.LookRotation(hit.normal) * additionalRotation;
             ConnectPortals();
 
-            // Æ÷Å»ÀÌ ¸ğµÎ »ı¼ºµÇ¾úÀ¸¸é ¿¬°á
+            // í¬íƒˆì´ ëª¨ë‘ ìƒì„±ë˜ì—ˆìœ¼ë©´ ì—°ê²°
             if (portalA != null && portalB != null)
             {
                 ConnectPortals();
@@ -60,13 +57,13 @@ public class NewBehaviourScript : MonoBehaviour
         }
         else
         {
-            Debug.Log("Æ÷Å»À» »ı¼ºÇÒ ¼ö ÀÖ´Â À§Ä¡¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.");
+            Debug.Log("í¬íƒˆì„ ìƒì„±í•  ìˆ˜ ìˆëŠ” ìœ„ì¹˜ë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
         }
     }
 
     void ConnectPortals()
     {
-        // Æ÷Å» A¿Í B°¡ ¸ğµÎ »ı¼ºµÇ¾ú´ÂÁö È®ÀÎ
+        // í¬íƒˆ Aì™€ Bê°€ ëª¨ë‘ ìƒì„±ë˜ì—ˆëŠ”ì§€ í™•ì¸
         if (portalA == null || portalB == null) return;
 
         Portal portalAScript = portalA.GetComponent<Portal>();
@@ -81,14 +78,14 @@ public class NewBehaviourScript : MonoBehaviour
             portalBScript = portalB.AddComponent<Portal>();
         }
 
-        // portalA¿Í portalB°¡ nullÀÌ ¾Æ´ÑÁö È®ÀÎ
+        // portalAì™€ portalBê°€ nullì´ ì•„ë‹Œì§€ í™•ì¸
         if (portalAScript != null && portalBScript != null)
         {
             portalAScript.otherPortal = portalB.transform;
             portalBScript.otherPortal = portalA.transform;
 
             
-            Debug.Log("Æ÷Å» A¿Í B°¡ ¿¬°áµÇ¾ú½À´Ï´Ù.");
+            Debug.Log("í¬íƒˆ Aì™€ Bê°€ ì—°ê²°ë˜ì—ˆìŠµë‹ˆë‹¤.");
         }
     }
 }
