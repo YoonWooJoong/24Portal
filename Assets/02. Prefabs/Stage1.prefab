@@ -50,7 +50,7 @@ GameObject:
   - component: {fileID: 4749072970262255487}
   - component: {fileID: 5146822422950285532}
   - component: {fileID: 61667135281739109}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,7 +162,7 @@ PrefabInstance:
       objectReference: {fileID: 7623396835921362438}
     - target: {fileID: 7978263940569366530, guid: 3267b587efd39ca498dfe1ea095a6e9a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.2582955
+      value: -8.72
       objectReference: {fileID: 0}
     - target: {fileID: 7978263940569366530, guid: 3267b587efd39ca498dfe1ea095a6e9a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -170,7 +170,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7978263940569366530, guid: 3267b587efd39ca498dfe1ea095a6e9a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.36
+      value: 0.18
       objectReference: {fileID: 0}
     - target: {fileID: 7978263940569366530, guid: 3267b587efd39ca498dfe1ea095a6e9a, type: 3}
       propertyPath: m_LocalRotation.w

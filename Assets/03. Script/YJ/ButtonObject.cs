@@ -6,7 +6,7 @@ using UnityEngine;
 public class ButtonObject : MonoBehaviour
 {
     public Transform buttonTop;
-    private float pressThreshold = 0.132f;
+    private float pressThreshold = 0.136f;
     private bool isPressed = false;
     public GameObject door_object;
     Door door;
