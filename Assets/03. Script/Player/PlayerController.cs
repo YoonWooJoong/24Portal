@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rigidbody;
 
     private Animator _animator;
+    private NewBehaviourScript portalSpawner;
 
     /// <summary>
     /// 좌 혹은 우 클릭시 실행
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponentInChildren<Animator>();
+        portalSpawner = GetComponent<NewBehaviourScript>();
     }
     
     private void Start()
@@ -59,11 +61,11 @@ public class PlayerController : MonoBehaviour
         dir *= moveSpeed;
         if(dir.magnitude > 0.2f)
         {
-            _animator.SetBool("IsMoving", true);
+           //_animator.SetBool("IsMoving", true);
         } 
         else
         {
-            _animator.SetBool("IsMoving", false);
+            //_animator.SetBool("IsMoving", false);
         }
 
         dir.y = _rigidbody.velocity.y;
@@ -131,9 +133,7 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            //좌클릭 행동 //다른 클래스로 갈 수도 있음
-            Debug.Log("left click");
-            portalAction?.Invoke();
+            portalSpawner.SpawnPortalA();
         }
     }
 
@@ -141,9 +141,7 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            //우클릭 행동 //다른 클래스로 갈 수도 있음
-            Debug.Log("right click"); 
-            portalAction?.Invoke();
+            portalSpawner.SpawnPortalB();
         }
     }
 }

@@ -9,23 +9,36 @@ public class NewBehaviourScript : MonoBehaviour
     public GameObject portalBPrefab; 
     public float maxSpawnDistance = 100f;    
 
-    private GameObject portalA;
-    private GameObject portalB;
+    public GameObject portalA;
+    public GameObject portalB;
+
+    
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            SpawnPortal(ref portalA, portalAPrefab);
-        }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            SpawnPortal(ref portalB, portalBPrefab);
-        }
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    SpawnPortal(ref portalA, portalAPrefab);
+        //}
+        //
+        //if (Input.GetMouseButtonDown(1))
+        //{
+        //    SpawnPortal(ref portalB, portalBPrefab);
+        //}
     }
 
-    void SpawnPortal(ref GameObject portal, GameObject prefab)
+    public void SpawnPortalA()
+    {
+        SpawnPortal(ref portalA, portalAPrefab);
+    }
+
+    public void SpawnPortalB()
+    {
+        SpawnPortal(ref portalB, portalBPrefab);
+    }
+
+
+    public void SpawnPortal(ref GameObject portal, GameObject prefab)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
