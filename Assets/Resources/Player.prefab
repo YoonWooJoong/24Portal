@@ -2041,7 +2041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5c95f09ef726fd4d904c15b7969c480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  walkSpeed: 5
   runSpeed: 10
   jumpPower: 200
   groundLayerMask:
@@ -2189,6 +2189,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 947a5979-9e08-44f0-98a5-8db7fd3ac6ba
     m_ActionName: Player/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4723201176119428879}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnRun
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a4f2aede-2052-460f-af0b-33646afed9fe
+    m_ActionName: Player/Run[/Keyboard/shift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
