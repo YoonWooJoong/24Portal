@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -8,30 +8,44 @@ public class ButtonObject : MonoBehaviour
     public Transform buttonTop;
     private float pressThreshold = 0.132f;
     private bool isPressed = false;
+    public GameObject door_object;
+    Door door;
+
+    private void Start()
+    {
+        door = door_object.GetComponent<Door>();
+    }
+
 
     private void Update()
     {
-        if (buttonTop.position.y <= pressThreshold)
+        //Debug.Log($"{buttonTop.localPosition.y}");
+        if (buttonTop.localPosition.y <= pressThreshold)
         {
-            Debug.Log("´­·È½À´Ï´Ù.");
-            if(!isPressed)
+            //Debug.Log("ëˆŒë ¸ìŠµë‹ˆë‹¤.");
+            
+            if (!isPressed)
                 isPressed = true;
+
+            OnPressed();
         }
         else
         {
-            Debug.Log("¾È´­·È½À´Ï´Ù.");
+            //Debug.Log("ì•ˆëˆŒë ¸ìŠµë‹ˆë‹¤.");
             isPressed = false;
+
+            OffPressed();
         }
     }
 
     private void OnPressed()
     {
-        
+        door.IsOpen = true;
     }
 
     private void OffPressed()
     {
-        
+        door.IsOpen = false;
     }
 
 }
