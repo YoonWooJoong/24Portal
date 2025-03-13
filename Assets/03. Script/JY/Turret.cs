@@ -6,7 +6,7 @@ public class Turret : MonoBehaviour
 {
     public float detectionRange = 10f;  
     public float attackRange = 10f;   
-    public float attackCooldown = 0.2f;
+    public float attackCooldown = 0.1f;
     public float bulletForce = 5f;
     public GameObject bulletPrefab;  
     public Transform gunBarrel; // 총알 발사 위치
@@ -15,10 +15,19 @@ public class Turret : MonoBehaviour
     private float attackTimer = 0f;
     private float rotationSpeed = 200f; //회전스피드
     private bool InAngle = false;
+    private bool isKnockedOver = false;  // 터렛이 넘어졌는지 여부
+    private Rigidbody rb;
 
-
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
     void Update()
     {
+        if (isKnockedOver)
+        {
+            return;
+        }
         // 플레이어가 감지 범위 내에 있으면 추적
         if (playerInRange)
         {
@@ -82,7 +91,7 @@ public class Turret : MonoBehaviour
 
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            Debug.Log($"플레이어 방향: {direction}, 감지 각도: {angle}");
+           // Debug.Log($"플레이어 방향: {direction}, 감지 각도: {angle}");
             InAngle = true;
         }
         else
@@ -116,12 +125,16 @@ public class Turret : MonoBehaviour
                 Debug.Log("플레이어가 가려져 공격 불가");
             }
         }
+        Debug.Log($"현재 attackTimer: {attackTimer}, attackCooldown: {attackCooldown}");
     }
 
-    // 총알 발사
+    /// <summary>
+    /// 총알 발사
+    /// </summary>
     void ShootBullet()
     {
-        GameObject bullet = Instantiate(bulletPrefab, gunBarrel.position, gunBarrel.rotation);
+        Vector3 bulletPosition = gunBarrel.position + Vector3.up * 0.9f;
+        GameObject bullet = Instantiate(bulletPrefab, bulletPosition, gunBarrel.rotation);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         rb.AddForce(gunBarrel.forward * bulletForce, ForceMode.VelocityChange);  // 총알 발사
     }
@@ -148,5 +161,23 @@ public class Turret : MonoBehaviour
             }
         }
         return false;  // 장애물에 의해 플레이어가 가려짐
+    }
+    /// <summary>
+    /// 터렛과 플레이어가 충돌 시 공격을 멈추고 넘어지게 하는 함수
+    /// </summary>
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // 플레이어와 충돌 시 공격을 멈추고 넘어지게 만들기
+            isKnockedOver = true;  // 터렛이 넘어짐
+            attackTimer = 0f;  // 공격 타이머 리셋
+            InAngle = false;  // 공격을 멈춤
+            Debug.Log("충돌함");
+
+            // Rigidbody의 물리적인 힘을 추가하여 넘어지게 만들기
+            rb.AddForce(Vector3.up * 0.1f, ForceMode.Impulse);  // 위로 힘을 줘서 약간 넘어지게
+            rb.AddTorque(Vector3.up * 10f, ForceMode.Impulse);  // 회전력도 주어서 넘어지도록 만듬
+        }
     }
 }
