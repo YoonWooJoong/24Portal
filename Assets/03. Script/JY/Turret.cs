@@ -13,7 +13,7 @@ public class Turret : MonoBehaviour
     private Transform player;        
     private bool playerInRange = false;
     private float attackTimer = 0f;
-    private float rotationSpeed = 50f; //회전스피드
+    private float rotationSpeed = 200f; //회전스피드
     private bool InAngle = false;
 
 
@@ -79,8 +79,9 @@ public class Turret : MonoBehaviour
 
         if (angle < 45f)  // 90도의 절반인 45도를 기준으로 회전
         {
-           
-            transform.rotation = Quaternion.LookRotation(direction);
+
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             Debug.Log($"플레이어 방향: {direction}, 감지 각도: {angle}");
             InAngle = true;
         }
@@ -101,17 +102,18 @@ public class Turret : MonoBehaviour
 
         attackTimer += Time.deltaTime;
 
-        if (InAngle)
+        if (InAngle && attackTimer >= attackCooldown && Vector3.Distance(transform.position, player.position) <= attackRange)
         {
-
-            if (attackTimer >= attackCooldown && Vector3.Distance(transform.position, player.position) <= attackRange)
+            // 플레이어가 보이는지 체크
+            if (IsPlayerVisible())
             {
-
-              
-                    ShootBullet();
-                    attackTimer = 0f;  // 공격 후 타이머 리셋
-                    Debug.LogWarning("!!!");
-                
+                ShootBullet();
+                attackTimer = 0f;  // 공격 후 타이머 리셋
+            }
+            else
+            {
+                // 플레이어가 가려져 있으면 공격하지 않음
+                Debug.Log("플레이어가 가려져 공격 불가");
             }
         }
     }
@@ -128,5 +130,23 @@ public class Turret : MonoBehaviour
         // 감지 범위를 빨간색 원으로 표시
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRange); // 감지 범위 원 그리기
+    }
+
+    /// <summary>
+    /// 플레이어와 터렛 사이에 장애물이 있는지 확인하는 함수
+    /// </summary>
+    bool IsPlayerVisible()
+    {
+        RaycastHit hit;
+        // 터렛에서 플레이어 방향으로 광선을 쏘아 장애물이 있는지 확인
+        Vector3 directionToPlayer = player.position - gunBarrel.position;
+        if (Physics.Raycast(gunBarrel.position, directionToPlayer, out hit, attackRange))
+        {
+            if (hit.transform.CompareTag("Player"))
+            {
+                return true;  // 플레이어가 보임
+            }
+        }
+        return false;  // 장애물에 의해 플레이어가 가려짐
     }
 }
