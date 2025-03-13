@@ -1,4 +1,4 @@
-
+Ôªø
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,14 +25,19 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody _rigidbody;
 
+    private Animator _animator;
+    private PortalSpawner portalSpawner;
+
     /// <summary>
-    /// ¡¬ »§¿∫ øÏ ≈¨∏ØΩ√ Ω««‡
+    /// Ï¢å ÌòπÏùÄ Ïö∞ ÌÅ¥Î¶≠Ïãú Ïã§Ìñâ
     /// </summary>
     public Action portalAction;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _animator = GetComponentInChildren<Animator>();
+        portalSpawner = GetComponent<PortalSpawner>();
     }
     
     private void Start()
@@ -54,6 +59,15 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 dir = transform.forward * curMovementInput.y + transform.right * curMovementInput.x;
         dir *= moveSpeed;
+        if(dir.magnitude > 0.2f)
+        {
+           //_animator.SetBool("IsMoving", true);
+        } 
+        else
+        {
+            //_animator.SetBool("IsMoving", false);
+        }
+
         dir.y = _rigidbody.velocity.y;
 
         _rigidbody.velocity = dir;
@@ -80,7 +94,7 @@ public class PlayerController : MonoBehaviour
 
         for (int i = 0; i < rays.Length; i++)
         {
-            if (Physics.Raycast(rays[i], 0.1f, groundLayerMask))
+            if (Physics.Raycast(rays[i], 0.2f, groundLayerMask))
             {
                 return true;
             }
@@ -108,8 +122,9 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started)
+        if (context.phase == InputActionPhase.Started && IsGround())
         {
+            _animator.SetTrigger("IsJump");
             _rigidbody.AddForce(Vector2.up * jumpPower, ForceMode.Impulse);
         }
     }
@@ -118,9 +133,7 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            //¡¬≈¨∏Ø «‡µø //¥Ÿ∏• ≈¨∑°Ω∫∑Œ ∞• ºˆµµ ¿÷¿Ω
-            Debug.Log("left click");
-            portalAction?.Invoke();
+            portalSpawner.SpawnPortalA();
         }
     }
 
@@ -128,9 +141,7 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            //øÏ≈¨∏Ø «‡µø //¥Ÿ∏• ≈¨∑°Ω∫∑Œ ∞• ºˆµµ ¿÷¿Ω
-            Debug.Log("right click"); 
-            portalAction?.Invoke();
+            portalSpawner.SpawnPortalB();
         }
     }
 }
