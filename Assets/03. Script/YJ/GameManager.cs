@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public StageChanger stageChanger;
     public GameObject playerPrefab;
     public GameObject startPosition;
+    public UIManager uiManager;
 
     private void Awake()
     {
@@ -40,8 +41,11 @@ public class GameManager : MonoBehaviour
     {
         playerPrefab = Resources.Load<GameObject>("Player");
         StageChanger changerObject = new GameObject("StageChanger").AddComponent<StageChanger>();
+        UIManager uIManager = new GameObject("UIManager").AddComponent<UIManager>();
         changerObject.transform.SetParent(transform);
+        uiManager.transform.SetParent(transform);
         stageChanger = GetComponentInChildren<StageChanger>();
+        uiManager = GetComponentInChildren<UIManager>();
         PlayerCreate();
     }
 
