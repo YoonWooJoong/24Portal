@@ -10,22 +10,9 @@ public class NewBehaviourScript : MonoBehaviour
     public float maxSpawnDistance = 100f;    
 
     public GameObject portalA;
-    public GameObject portalB;
+    public GameObject portalB;   
 
     
-
-    void Update()
-    {
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    SpawnPortal(ref portalA, portalAPrefab);
-        //}
-        //
-        //if (Input.GetMouseButtonDown(1))
-        //{
-        //    SpawnPortal(ref portalB, portalBPrefab);
-        //}
-    }
 
     public void SpawnPortalA()
     {
@@ -63,6 +50,7 @@ public class NewBehaviourScript : MonoBehaviour
 
             Quaternion additionalRotation = Quaternion.Euler(90f, 0f, 0f);
             portal.transform.rotation = Quaternion.LookRotation(hit.normal) * additionalRotation;
+            ConnectPortals();
 
             // 포탈이 모두 생성되었으면 연결
             if (portalA != null && portalB != null)
