@@ -1996,7 +1996,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8100845187228332597}
   serializedVersion: 4
-  m_Mass: 60
+  m_Mass: 40
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -2045,7 +2045,7 @@ MonoBehaviour:
   jumpPower: 100
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   cameraContainer: {fileID: 1678971731370268830}
   minXLook: -90
   maxXLook: 90
