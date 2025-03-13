@@ -2042,7 +2042,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   runSpeed: 10
-  jumpPower: 100
+  jumpPower: 200
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 0
@@ -2066,7 +2066,7 @@ MonoBehaviour:
   maxCheckDistance: 1
   layerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
 --- !u!114 &5402903197225414393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2297,6 +2297,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8644100006706599681}
+  - component: {fileID: 8849739654199296462}
   m_Layer: 10
   m_Name: Rig
   m_TagString: Untagged
@@ -2320,3 +2321,24 @@ Transform:
   - {fileID: 6398991289040180843}
   m_Father: {fileID: 4360176739520729707}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &8849739654199296462
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9033710668094920821}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c60df79e4d81c4344b362d278f398229, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

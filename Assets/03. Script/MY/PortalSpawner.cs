@@ -7,7 +7,7 @@ public class NewBehaviourScript : MonoBehaviour
 {    
     public GameObject portalAPrefab; 
     public GameObject portalBPrefab; 
-    public float maxSpawnDistance = 100f;
+    public float maxSpawnDistance = 100f;    
 
     private GameObject portalA;
     private GameObject portalB;
@@ -86,6 +86,7 @@ public class NewBehaviourScript : MonoBehaviour
             portalAScript.otherPortal = portalB.transform;
             portalBScript.otherPortal = portalA.transform;
 
+            
             Debug.Log("포탈 A와 B가 연결되었습니다.");
         }
     }

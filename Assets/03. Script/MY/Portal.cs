@@ -6,33 +6,36 @@ using UnityEngine;
 public class Portal : MonoBehaviour
 {
     public Transform otherPortal;
-    public float teleportOffset = 0.8f;
-    public int recursionLimit = 5; // 최대 재귀 깊이
+    public float teleportOffset = 1.0f;
+    public int recursionLimit = 3; // 최대 재귀 깊이
     public Camera portalCamera; // 포탈 카메라
     public RenderTexture portalTexture; // 렌더 텍스처
+    public float teleportDuration = 0.4f; // 텔레포트 지속 시간 (초)
+    public float teleportDelay = 0.2f;  // 텔레포트 딜레이 시간 (초)
+
 
     private static int currentRecursionDepth = 0; // 현재 재귀 깊이
+    private bool canTeleport = true;
 
     void Start()
     {
-        // 렌더 텍스처 생성 및 할당
         portalTexture = new RenderTexture(256, 256, 16);
         portalCamera.targetTexture = portalTexture;
         GetComponent<Renderer>().material.mainTexture = portalTexture;
 
-        // FOV 초기화
         UpdateFOV();
+        portalCamera.enabled = false;
     }
 
     void Update()
     {
-        // 포탈 크기가 변경될 때 FOV 업데이트
         UpdateFOV();
+        RenderPortalView();
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && canTeleport)
         {
             TeleportPlayer(other.transform);
         }
@@ -46,17 +49,26 @@ public class Portal : MonoBehaviour
             return;
         }
 
-        // 재귀 깊이 초기화
-        currentRecursionDepth = 0;
-
-        // 텔레포트 실행
-        TeleportRecursive(player);
+        StartCoroutine(TeleportCoroutine(player));
     }
 
-    void TeleportRecursive(Transform player)
+    IEnumerator TeleportCoroutine(Transform player)
     {
-        // 최대 재귀 깊이 초과 시 렌더링 중단
-        if (currentRecursionDepth >= recursionLimit) return;
+        canTeleport = false;
+
+        Rigidbody rb = player.GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            Debug.LogError("플레이어에게 Rigidbody가 없습니다!");
+            yield break;
+        }
+
+        // 텔레포트 전 속도 저장 및 초기화
+        Vector3 previousVelocity = rb.velocity;
+        Vector3 previousAngularVelocity = rb.angularVelocity;
+
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
 
         // 1. 로컬 위치 계산
         Vector3 localPosition = transform.InverseTransformPoint(player.position);
@@ -67,58 +79,71 @@ public class Portal : MonoBehaviour
         // 3. 위치 보정
         newPosition += otherPortal.forward * teleportOffset;
 
-        // 4. Y축 회전 계산
-        float yRotationDifference = otherPortal.rotation.eulerAngles.y - transform.rotation.eulerAngles.y;
-        Quaternion yRotation = Quaternion.Euler(0f, yRotationDifference, 0f);
-        Quaternion newRotation = yRotation * player.rotation;
-
-        Rigidbody rb = player.GetComponent<Rigidbody>();
-        if (rb != null)
+        float yOffset = 2f;
+        RaycastHit hit;
+        if (Physics.Raycast(newPosition, Vector3.down, out hit, 10f))
         {
-            // 텔레포트 전에 속도 저장
-            Vector3 previousVelocity = rb.velocity;
-
-            // 위치와 회전 변경
-            rb.position = newPosition;
-            player.rotation = newRotation;
-
-            // 속도 초기화
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-
-            // 속도 다시 적용
-            rb.velocity = previousVelocity;
+            newPosition.y = hit.point.y + yOffset;
         }
         else
         {
-            Debug.LogError("플레이어에게 Rigidbody가 없습니다!");
+            Debug.LogWarning("레이캐스트 실패: 안전을 위해 기본 높이 사용");
+            newPosition.y += yOffset;
         }
 
-        // 5. 재귀 렌더링
-        RenderPortalView();
+        // ***** [수정 시작] 텔레포트 시켜줄 포탈의 카메라 방향으로 설정 *****
+        // 1. 현재 포탈의 카메라 Transform 가져오기
+        Transform currentCameraTransform = portalCamera.transform;
+
+        // 2. 새로운 회전 설정
+        Quaternion newRotation = currentCameraTransform.rotation;
+        // ***** [수정 끝] *****
+
+        // 위치 및 회전 적용
+        rb.position = newPosition;
+        player.rotation = newRotation;
+
+        // 5. 충돌 방지 (레이어 사용)
+        player.gameObject.layer = LayerMask.NameToLayer("Teleporting"); // "Teleporting" 레이어 생성 필요
+        yield return new WaitForSeconds(0.05f); // 짧은 시간 동안 충돌 무시
+        player.gameObject.layer = LayerMask.NameToLayer("Default");
+
+        // 딜레이 시간 동안 대기
+        yield return new WaitForSeconds(teleportDelay);
+
+        // 속도 다시 적용
+        rb.velocity = previousVelocity;
+        rb.angularVelocity = previousAngularVelocity;
+
+        canTeleport = true;
     }
 
     void RenderPortalView()
     {
-        // 재귀 깊이 증가
         currentRecursionDepth++;
 
-        // 포탈 카메라 위치 및 회전 설정
-        portalCamera.transform.position = otherPortal.position;
-        portalCamera.transform.rotation = otherPortal.rotation;
+        if (currentRecursionDepth > recursionLimit)
+        {
+            currentRecursionDepth--;
+            return;
+        }
 
-        // 렌더링
+        portalCamera.transform.position = otherPortal.position;
+        portalCamera.transform.rotation = otherPortal.rotation * Quaternion.Euler(-90f, 0f, 0f);
+
+        portalCamera.enabled = true;
         portalCamera.Render();
+        portalCamera.enabled = false;
+
+        currentRecursionDepth--;
     }
 
     void UpdateFOV()
     {
-        // 포탈의 크기를 기준으로 FOV 계산
         float portalWidth = transform.localScale.x;
-        float distance = 1f; // 임의의 거리 값
+        float distance = 1f;
         float fov = 2 * Mathf.Atan(portalWidth / (2 * distance)) * Mathf.Rad2Deg;
-
-        // 카메라 FOV 업데이트
         portalCamera.fieldOfView = fov;
     }
 }
+
