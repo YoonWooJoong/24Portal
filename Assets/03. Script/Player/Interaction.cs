@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class Interaction : MonoBehaviour
 {
+    [SerializeField]
     private GameObject detectedItem;
     private Camera _camera;
 
@@ -13,6 +14,8 @@ public class Interaction : MonoBehaviour
     private float lastCheckTime;
     public float maxCheckDistance;
     public LayerMask layerMask;
+
+    private bool IsPicking = false;
 
 
     /// <summary>
@@ -28,7 +31,7 @@ public class Interaction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.time - lastCheckTime > checkRate)
+        if (!IsPicking && Time.time - lastCheckTime > checkRate) // 물건을 집지 않았을 경우 
         {
             lastCheckTime = Time.time;
 
@@ -46,6 +49,16 @@ public class Interaction : MonoBehaviour
         }
     }
 
+    public void FixedUpdate()
+    {
+        if(IsPicking)
+        {
+            detectedItem.transform.position = _camera.transform.position + _camera.transform.rotation * (1.5f * Vector3.forward);
+            detectedItem.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            detectedItem.transform.rotation = _camera.transform.rotation;
+        }
+    }
+
     public void OnInteraction(InputAction.CallbackContext context)
     {
         if (detectedItem == null)
@@ -56,9 +69,15 @@ public class Interaction : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             //아이템 상호작용 //큐브 들기 등...
-
-            //test code
-            detectedItem.GetComponent<Rigidbody>().AddForce(Vector3.up * 10f, ForceMode.Impulse); 
+            if(!IsPicking)
+            {
+                IsPicking = true;
+            } 
+            else
+            {
+                IsPicking = false;
+                detectedItem.GetComponent<Rigidbody>().velocity = gameObject.GetComponent<Rigidbody>().velocity;
+            }
         }
     }
 }
