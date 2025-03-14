@@ -1,4 +1,4 @@
-
+Ôªø
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,10 +27,10 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rigidbody;
 
     private Animator _animator;
-    private NewBehaviourScript portalSpawner;
+    private PortalSpawner portalSpawner;
 
     /// <summary>
-    /// ¡¬ »§¿∫ øÏ ≈¨∏ØΩ√ Ω««‡
+    /// Ï¢å ÌòπÏùÄ Ïö∞ ÌÅ¥Î¶≠Ïãú Ïã§Ìñâ
     /// </summary>
     public Action portalAction;
 
@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponentInChildren<Animator>();
-        portalSpawner = GetComponent<NewBehaviourScript>();
+        portalSpawner = GetComponent<PortalSpawner>();
     }
     
     private void Start()

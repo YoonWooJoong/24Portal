@@ -2225,6 +2225,9 @@ MonoBehaviour:
   portalAPrefab: {fileID: 8049701388017496905, guid: a859007ccf60f604b82ef9a08035bad1, type: 3}
   portalBPrefab: {fileID: 8597603700312921601, guid: 86321ffc5d350e645a73264b88441a94, type: 3}
   maxSpawnDistance: 100
+  portalSpawnLayer:
+    serializedVersion: 2
+    m_Bits: 2048
   portalA: {fileID: 0}
   portalB: {fileID: 0}
 --- !u!1 &8179445264729374306

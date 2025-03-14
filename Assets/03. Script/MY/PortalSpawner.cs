@@ -1,31 +1,20 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class PortalSpawner : MonoBehaviour
 {    
     public GameObject portalAPrefab; 
     public GameObject portalBPrefab; 
-    public float maxSpawnDistance = 100f;    
+    public float maxSpawnDistance = 100f;
+    public LayerMask portalSpawnLayer;
 
     public GameObject portalA;
-    public GameObject portalB;
+    public GameObject portalB;   
 
     
-
-    void Update()
-    {
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    SpawnPortal(ref portalA, portalAPrefab);
-        //}
-        //
-        //if (Input.GetMouseButtonDown(1))
-        //{
-        //    SpawnPortal(ref portalB, portalBPrefab);
-        //}
-    }
 
     public void SpawnPortalA()
     {
@@ -41,44 +30,37 @@ public class NewBehaviourScript : MonoBehaviour
     public void SpawnPortal(ref GameObject portal, GameObject prefab)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, maxSpawnDistance))
-        {
+        RaycastHit hitAll; 
+        RaycastHit hitPortalLayer; 
+        
+        bool hasHitAll = Physics.Raycast(ray, out hitAll, maxSpawnDistance);       
+        bool hasHitPortalLayer = Physics.Raycast(ray, out hitPortalLayer, maxSpawnDistance, portalSpawnLayer);
+        
+        if (hasHitPortalLayer && (!hasHitAll || hitPortalLayer.distance <= hitAll.distance))
+        {            
             if (portal != null)
             {
                 Destroy(portal);
             }
-
-
-            float zOffset = 0.3f;
-            float xOffset = 0.4f;
-            Vector3 spawnPosition = hit.point + new Vector3(xOffset, 0f, zOffset);
-
-            // Æ÷Å» »ı¼º ¹× º¯¼ö ÇÒ´ç
-            GameObject newPortal = Instantiate(prefab, hit.point, Quaternion.identity);
+            Vector3 spawnPosition = hitPortalLayer.point + hitPortalLayer.normal * 0.01f;            
+            GameObject newPortal = Instantiate(prefab, spawnPosition, Quaternion.identity);
             portal = newPortal;
 
             Portal portalScript = newPortal.GetComponent<Portal>();
 
             Quaternion additionalRotation = Quaternion.Euler(90f, 0f, 0f);
-            portal.transform.rotation = Quaternion.LookRotation(hit.normal) * additionalRotation;
-
-            // Æ÷Å»ÀÌ ¸ğµÎ »ı¼ºµÇ¾úÀ¸¸é ¿¬°á
-            if (portalA != null && portalB != null)
-            {
-                ConnectPortals();
-            }
+            portal.transform.rotation = Quaternion.LookRotation(hitPortalLayer.normal) * additionalRotation;
+            ConnectPortals();
         }
         else
         {
-            Debug.Log("Æ÷Å»À» »ı¼ºÇÒ ¼ö ÀÖ´Â À§Ä¡¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.");
+            Debug.Log("í¬íƒˆì„ ìƒì„±í•  ìˆ˜ ìˆëŠ” ìœ„ì¹˜ë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
         }
     }
 
     void ConnectPortals()
     {
-        // Æ÷Å» A¿Í B°¡ ¸ğµÎ »ı¼ºµÇ¾ú´ÂÁö È®ÀÎ
+        // í¬íƒˆ Aì™€ Bê°€ ëª¨ë‘ ìƒì„±ë˜ì—ˆëŠ”ì§€ í™•ì¸
         if (portalA == null || portalB == null) return;
 
         Portal portalAScript = portalA.GetComponent<Portal>();
@@ -93,14 +75,14 @@ public class NewBehaviourScript : MonoBehaviour
             portalBScript = portalB.AddComponent<Portal>();
         }
 
-        // portalA¿Í portalB°¡ nullÀÌ ¾Æ´ÑÁö È®ÀÎ
+        // portalAì™€ portalBê°€ nullì´ ì•„ë‹Œì§€ í™•ì¸
         if (portalAScript != null && portalBScript != null)
         {
             portalAScript.otherPortal = portalB.transform;
             portalBScript.otherPortal = portalA.transform;
 
             
-            Debug.Log("Æ÷Å» A¿Í B°¡ ¿¬°áµÇ¾ú½À´Ï´Ù.");
+            Debug.Log("í¬íƒˆ Aì™€ Bê°€ ì—°ê²°ë˜ì—ˆìŠµë‹ˆë‹¤.");
         }
     }
 }
