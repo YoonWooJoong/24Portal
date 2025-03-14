@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public GameObject startPosition;
     public UIManager uiManager;
     public SoundManager soundManager;
+    public int sceneLoadIndex;
 
     private float mouseSensitivty;
     public float MouseSensitivty
@@ -66,9 +67,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayerCreate()
     {
-        Debug.Log(playerPrefab);
         Debug.Log("캐릭터 생성");
-        Debug.Log(startPosition.gameObject.transform.position);
         if (playerPrefab != null)
             Instantiate(playerPrefab, startPosition.transform.position, Quaternion.identity);
         else
