@@ -41,6 +41,7 @@ public class StageChanger : MonoBehaviour
     public void LoadScene(int buildindex)
     {
         SceneManager.LoadScene(buildindex);
+        StartCoroutine(SpawnPlayerDelay());
     }
 
     /// <summary>

@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
         StageChanger changerObject = new GameObject("StageChanger").AddComponent<StageChanger>();
         UIManager uIManager = new GameObject("UIManager").AddComponent<UIManager>();
         changerObject.transform.SetParent(transform);
-        uiManager.transform.SetParent(transform);
+        uIManager.transform.SetParent(transform);
         stageChanger = GetComponentInChildren<StageChanger>();
         uiManager = GetComponentInChildren<UIManager>();
         PlayerCreate();

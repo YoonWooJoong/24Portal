@@ -10,7 +10,7 @@ public class EndPoint : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             GameManager.Instance.stageChanger.NextScene();
-            PlayerPrefs.SetInt("Level", SceneManager.GetActiveScene().buildIndex);
+            PlayerPrefs.SetInt("Level", SceneManager.GetActiveScene().buildIndex+1);
         }
     }
 }
