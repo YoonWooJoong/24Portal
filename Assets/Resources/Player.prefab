@@ -901,7 +901,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 6647
+    m_Bits: 1063927
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2046,7 +2046,7 @@ MonoBehaviour:
   jumpPower: 200
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1063671
   cameraContainer: {fileID: 1678971731370268830}
   minXLook: -90
   maxXLook: 90
@@ -2063,11 +2063,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c9aa935db2416b459a56e1e3112b022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  detectedItem: {fileID: 0}
   checkRate: 0.05
-  maxCheckDistance: 1
+  maxCheckDistance: 2
   layerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1056768
 --- !u!114 &5402903197225414393
 MonoBehaviour:
   m_ObjectHideFlags: 0
