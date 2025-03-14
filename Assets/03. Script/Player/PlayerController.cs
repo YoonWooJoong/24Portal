@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponentInChildren<Animator>();
         portalSpawner = GetComponent<PortalSpawner>();
+        lookSensitivity = GameManager.Instance.MouseSensitivty;
     }
     
     private void Start()

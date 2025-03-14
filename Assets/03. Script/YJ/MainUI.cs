@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -25,10 +25,12 @@ public class MainUI : BaseUI
 
     [Header("SettingUI")]
     public GameObject settingUI;
-    public Slider soundSlider;
+    public Slider bgmSoundSlider;
+    public Slider sfxSoundSlider;
     public Slider mouseSlider;
     public Button closeSettingButton;
 
+    public Camera cameraObject;
     private int ClearLevel;
 
     void Start()
@@ -41,16 +43,14 @@ public class MainUI : BaseUI
         leftButton.onClick.AddListener(OnClickLeftButton);
         okButton.onClick.AddListener(OnOKButton);
         closeSelectButton.onClick.AddListener(OnCloseSelectButton);
+
+        bgmSoundSlider.onValueChanged.AddListener(BGMSoundControl);
+        sfxSoundSlider.onValueChanged.AddListener(SFXSoundControl);
+        mouseSlider.onValueChanged.AddListener(MouseControl);
+        closeSettingButton.onClick.AddListener(OnCloseSettingButton);
         
     }
 
-    /// <summary>
-    /// È°¼ºÈ­ µÉ¶§ ÃÊ±âÈ­
-    /// </summary>
-    private void OnEnable()
-    {
-        Initialize();
-    }
 
     public override void Initialize()
     {
@@ -59,9 +59,10 @@ public class MainUI : BaseUI
         selectLevelUI.SetActive(false);
         settingUI.SetActive(false);
         ClearLevel = PlayerPrefs.GetInt("Level");
+        MouseControl(0.2f);
         if (ClearLevel <= 0)
         {
-            Debug.LogWarning("Å¬¸®¾îµÈ ·¹º§ÀÌ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("ì €ì¥ëœë ˆë²¨ì´ ì—†ìŠµë‹ˆë‹¤..");
             ClearLevel = 1;
         }
         if (mapSprites.Count > 0)
@@ -70,11 +71,12 @@ public class MainUI : BaseUI
             currentMapLevel = mapSprites.IndexOf(mapSprites[0])+1;
         }
         else
-            Debug.Log("½ºÇÁ¶óÀÌÆ®°¡ ¸ÊÀÌ¹ÌÁö¿¡ µé¾î°¡Áö ¾Ê¾Ò½À´Ï´Ù. ÃÊ±âÈ­ ½ÇÆĞ;;");
+            Debug.Log("ë§µì´ë¯¸ì§€ë¥¼ ë¶ˆëŸ¬ì˜¤ì§€ëª»í–ˆìŠµë‹ˆë‹¤;;");
+        cameraObject.gameObject.SetActive(true);
     }
 
     /// <summary>
-    /// ½ÃÀÛ¹öÆ°´©¸¦¶§
+    /// ì‹œì‘ë²„íŠ¼
     /// </summary>
     private void OnClickStartButton()
     {
@@ -83,7 +85,7 @@ public class MainUI : BaseUI
     }
 
     /// <summary>
-    /// ¼¼ÆÃ¹öÆ° ´©¸¦¶§
+    /// ì„¸íŒ…ë²„íŠ¼
     /// </summary>
     private void OnClickSettingButton()
     {
@@ -92,7 +94,7 @@ public class MainUI : BaseUI
     }
 
     /// <summary>
-    /// ³ª°¡±â ¹öÆ° ´©¸¦¶§
+    /// ë‚˜ê°€ê¸°ë²„íŠ¼
     /// </summary>
     private void OnClickExitButton()
     {
@@ -100,12 +102,12 @@ public class MainUI : BaseUI
     }
 
     /// <summary>
-    /// °ÔÀÓ¹öÆ°´©¸£°í ¸Ê¹Ù²Ù´Â ¿À¸¥ÂÊ ¹öÆ°´©¸¦¶§
+    /// ë§µì„ íƒ ì˜¤ë¥¸ìª½ë²„íŠ¼
     /// </summary>
     private void OnClickRightButton()
     {
         if (mapSprites == null)
-        { Debug.LogWarning("ÀÌ¹ÌÁö°¡ ¾ø½À´Ï´Ù."); }
+        { Debug.LogWarning("ë§µì´ì—†ìŠµë‹ˆë‹¤."); }
         else
         {
             for (int i = 0; i < mapSprites.Count; i++)
@@ -132,12 +134,12 @@ public class MainUI : BaseUI
 
 
     /// <summary>
-    /// ¿ŞÂÊ¹öÆ° ´©¸¦¶§
+    /// ë§µì„ íƒ ì™¼ìª½ë²„íŠ¼
     /// </summary>
     private void OnClickLeftButton()
     {
         if (mapSprites == null)
-        { Debug.LogWarning("ÀÌ¹ÌÁö°¡ ¾ø½À´Ï´Ù."); }
+        { Debug.LogWarning("ë§µì´ì—†ìŠµë‹ˆë‹¤."); }
         else
         {
             for (int i = 0; i < mapSprites.Count; i++)
@@ -163,16 +165,16 @@ public class MainUI : BaseUI
     }
 
     /// <summary>
-    /// ¸Ê·¹º§ ÅØ½ºÆ®º¯°æ
+    /// ë§µë ˆë²¨ í…ìŠ¤íŠ¸ë³€ê²½
     /// </summary>
-    /// <param name="i">¸Ê·¹º§</param>
+    /// <param name="i">í˜„ì¬ë§µë ˆë²¨</param>
     private void UpdateTextUI(int i)
     {
         mapLevelText.text = i.ToString();
     }
 
     /// <summary>
-    /// ¸Ê¼±ÅÃÁö¿¡¼­ ´İ±â¹öÆ°
+    /// ì„ íƒì°½ ë‚˜ê°€ê¸°ë²„íŠ¼
     /// </summary>
     private void OnCloseSelectButton()
     {
@@ -181,7 +183,7 @@ public class MainUI : BaseUI
     }
 
     /// <summary>
-    /// ¸Ê ¼±ÅÃ ¹öÆ°-
+    /// ë§µì„ íƒí™•ì¸ë²„íŠ¼
     /// </summary>
     private void OnOKButton()
     {
@@ -193,8 +195,29 @@ public class MainUI : BaseUI
         }
         else
         {
-            Debug.Log("¼±ÅÃÇÒ¼ö ¾ø´Â ¸ÊÀÔ´Ï´Ù. ÀÌÀü¸ÊÀ» Å¬¸®¾îÇÏ¼¼¿ä");
+            Debug.Log("í˜„ì¬ì„ íƒí• ìˆ˜ ì—†ëŠ” ë§µì…ë‹ˆë‹¤.");
         }
+    }
+
+    private void BGMSoundControl(float value)
+    {
+        GameManager.Instance.soundManager.BGMVolumeControll(value);
+    }
+
+    private void SFXSoundControl(float value)
+    {
+        GameManager.Instance.soundManager.SFXVolumeControll(value);
+    }
+
+    private void MouseControl(float value)
+    {
+        GameManager.Instance.MouseSensitivty = value;
+    }
+
+    private void OnCloseSettingButton()
+    {
+        settingUI.gameObject.SetActive(false);
+        mainButtons.gameObject.SetActive(true);
     }
 
 
