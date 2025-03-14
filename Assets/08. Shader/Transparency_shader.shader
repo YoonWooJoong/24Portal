@@ -14,6 +14,7 @@
         Tags { "Queue"="Transparent" "RenderType"="Transparent" }
         Blend [_SrcBlend] [_DstBlend]
         Cull Off
+
         Pass
         {
             CGPROGRAM
