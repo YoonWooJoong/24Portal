@@ -5,12 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class EndPoint : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
             GameManager.Instance.stageChanger.NextScene();
-            PlayerPrefs.SetInt("Level", SceneManager.GetActiveScene().buildIndex);
+            PlayerPrefs.SetInt("Level", SceneManager.GetActiveScene().buildIndex+1);
         }
     }
 }
