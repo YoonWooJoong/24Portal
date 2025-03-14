@@ -46,6 +46,11 @@ public class Interaction : MonoBehaviour
         }
     }
 
+    public void FixedUpdate()
+    {
+        
+    }
+
     public void OnInteraction(InputAction.CallbackContext context)
     {
         if (detectedItem == null)
