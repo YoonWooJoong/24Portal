@@ -839,7 +839,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1678971731370268830}
   - component: {fileID: 7730090649968808300}
-  - component: {fileID: 8716211655179204729}
   m_Layer: 10
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -901,7 +900,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1063415
+    m_Bits: 1063927
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -913,14 +912,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &8716211655179204729
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4217249529869879417}
-  m_Enabled: 1
 --- !u!1 &4284316998746341028
 GameObject:
   m_ObjectHideFlags: 0
@@ -2041,12 +2032,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5c95f09ef726fd4d904c15b7969c480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  walkSpeed: 5
   runSpeed: 10
-  jumpPower: 100
+  jumpPower: 200
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1063671
   cameraContainer: {fileID: 1678971731370268830}
   minXLook: -90
   maxXLook: 90
@@ -2063,11 +2054,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c9aa935db2416b459a56e1e3112b022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  detectedItem: {fileID: 0}
   checkRate: 0.05
-  maxCheckDistance: 1
+  maxCheckDistance: 2
   layerMask:
     serializedVersion: 2
-    m_Bits: 8192
+    m_Bits: 1056768
 --- !u!114 &5402903197225414393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2189,6 +2181,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 947a5979-9e08-44f0-98a5-8db7fd3ac6ba
     m_ActionName: Player/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4723201176119428879}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnRun
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a4f2aede-2052-460f-af0b-33646afed9fe
+    m_ActionName: Player/Run[/Keyboard/shift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -2206,8 +2214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c5b7093daf0ac4e93a839c45f2748e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portalAPrefab: {fileID: 3482927403541421869, guid: 4f6d5e5611866374c9e0971adc8a6576, type: 3}
-  portalBPrefab: {fileID: 3482927403541421869, guid: 1f2e61cd9ffb05141845f15d40a56394, type: 3}
+  portalAPrefab: {fileID: 8049701388017496905, guid: a859007ccf60f604b82ef9a08035bad1, type: 3}
+  portalBPrefab: {fileID: 8597603700312921601, guid: 86321ffc5d350e645a73264b88441a94, type: 3}
   maxSpawnDistance: 100
   portalSpawnLayer:
     serializedVersion: 2
@@ -2318,6 +2326,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8644100006706599681}
+  - component: {fileID: 8450881331848350220}
   m_Layer: 10
   m_Name: Rig
   m_TagString: Untagged
@@ -2341,3 +2350,24 @@ Transform:
   - {fileID: 6398991289040180843}
   m_Father: {fileID: 4360176739520729707}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &8450881331848350220
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9033710668094920821}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c60df79e4d81c4344b362d278f398229, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

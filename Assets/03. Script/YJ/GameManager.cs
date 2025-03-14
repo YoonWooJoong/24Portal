@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -19,6 +20,15 @@ public class GameManager : MonoBehaviour
     public StageChanger stageChanger;
     public GameObject playerPrefab;
     public GameObject startPosition;
+    public UIManager uiManager;
+    public SoundManager soundManager;
+
+    private float mouseSensitivty;
+    public float MouseSensitivty
+    {
+        get { return mouseSensitivty; }
+        set { mouseSensitivty = Mathf.Clamp01(value); }
+    }
 
     private void Awake()
     {
@@ -40,8 +50,25 @@ public class GameManager : MonoBehaviour
     {
         playerPrefab = Resources.Load<GameObject>("Player");
         StageChanger changerObject = new GameObject("StageChanger").AddComponent<StageChanger>();
+        UIManager uIObject = new GameObject("UIManager").AddComponent<UIManager>();
+        SoundManager soundObject = new GameObject("SoundManager").AddComponent<SoundManager>();
         changerObject.transform.SetParent(transform);
+        uIObject.transform.SetParent(transform);
+        soundObject.transform.SetParent(transform);
         stageChanger = GetComponentInChildren<StageChanger>();
+        uiManager = GetComponentInChildren<UIManager>();
+        soundManager = GetComponentInChildren<SoundManager>();
+        soundManager.Init();
+
+        soundManager.PlayBGM(0);
+        uiManager.ShowUI<MainUI>();
+    }
+
+    public void PlayerCreate()
+    {
+        Debug.Log(playerPrefab);
+        Debug.Log("캐릭터 생성");
+        Debug.Log(startPosition.gameObject.transform.position);
         if (playerPrefab != null)
             Instantiate(playerPrefab, startPosition.transform.position, Quaternion.identity);
         else

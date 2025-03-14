@@ -9,7 +9,8 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed;
+    private float moveSpeed;
+    public float walkSpeed;
     public float runSpeed;
     public float jumpPower;
     private Vector2 curMovementInput;
@@ -38,11 +39,13 @@ public class PlayerController : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponentInChildren<Animator>();
         portalSpawner = GetComponent<PortalSpawner>();
+        lookSensitivity = GameManager.Instance.MouseSensitivty;
     }
     
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        moveSpeed = walkSpeed;
     }
 
     private void FixedUpdate()
@@ -61,11 +64,11 @@ public class PlayerController : MonoBehaviour
         dir *= moveSpeed;
         if(dir.magnitude > 0.2f)
         {
-           //_animator.SetBool("IsMoving", true);
+           _animator.SetBool("IsMoving", true);
         } 
         else
         {
-            //_animator.SetBool("IsMoving", false);
+            _animator.SetBool("IsMoving", false);
         }
 
         dir.y = _rigidbody.velocity.y;
@@ -142,6 +145,21 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             portalSpawner.SpawnPortalB();
+        }
+    }
+
+    public void OnRun(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            moveSpeed = runSpeed;
+            _animator.SetBool("IsRun", true);
+        }
+
+        if(context.phase == InputActionPhase.Canceled)
+        {
+            moveSpeed = walkSpeed;
+            _animator.SetBool("IsRun", false);
         }
     }
 }

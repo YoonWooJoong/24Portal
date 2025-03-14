@@ -2041,12 +2041,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5c95f09ef726fd4d904c15b7969c480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  walkSpeed: 0
   runSpeed: 10
   jumpPower: 200
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1056961
   cameraContainer: {fileID: 1678971731370268830}
   minXLook: -90
   maxXLook: 90
@@ -2064,10 +2064,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkRate: 0.05
-  maxCheckDistance: 1
+  maxCheckDistance: 2
   layerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1056768
 --- !u!114 &5402903197225414393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2189,6 +2189,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 947a5979-9e08-44f0-98a5-8db7fd3ac6ba
     m_ActionName: Player/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a4f2aede-2052-460f-af0b-33646afed9fe
+    m_ActionName: Player/Run[/Keyboard/shift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
