@@ -5,24 +5,61 @@ using UnityEngine;
 
 public class Portal : MonoBehaviour
 {
-    public Transform otherPortal;    
+    public Transform otherPortal;
     public int recursionLimit = 3; // 최대 재귀 깊이
     public Camera portalCamera; // 포탈 카메라
-    public float cameraForwardOffset = 1.5f;
-    public RenderTexture portalTexture; // 렌더 텍스처   
+    public float cameraForwardOffset = 0.5f;
+    public RenderTexture portalTexture; // 렌더 텍스처
     public LayerMask teleportLayerMask; // 텔레포트 가능한 레이어 마스크
-
 
     private static int currentRecursionDepth = 0; // 현재 재귀 깊이
     private bool canTeleport = true;
 
+    [Header("Mesh Panel Settings")]
+    public Vector3 meshPanelPosition = Vector3.zero;
+    public Vector3 meshPanelRotation = Vector3.zero;
+    public Vector3 meshPanelScale = Vector3.one;
+    public string targetChildName = "Portal";
+
+
+    private Material portalMaterial;
+    private GameObject meshPanel; // 메시 패널
+
     void Start()
-    {
+    {        
         portalTexture = new RenderTexture(256, 256, 16);
         portalCamera.targetTexture = portalTexture;
-        GetComponent<Renderer>().material.mainTexture = portalTexture;
 
-        UpdateFOV();
+        meshPanel = GameObject.CreatePrimitive(PrimitiveType.Plane); // Plane 메시 사용
+        meshPanel.name = "PortalMeshPanel"; // 이름 설정
+
+        // 3. 타겟 자식 오브젝트 찾기
+        Transform targetChild = transform.Find(targetChildName);
+        if (targetChild == null)
+        {
+            Debug.LogError("타겟 자식 오브젝트를 찾을 수 없습니다: " + targetChildName);
+            enabled = false;
+            return;
+        }
+
+        // 4. 메시 패널의 부모를 타겟 자식 오브젝트로 설정
+        meshPanel.transform.SetParent(targetChild, false);
+
+        // 5. 메시 패널 위치, 회전, 크기 설정
+        meshPanel.transform.localPosition = meshPanelPosition;
+        meshPanel.transform.localRotation = Quaternion.Euler(meshPanelRotation);
+        meshPanel.transform.localScale = meshPanelScale;
+
+        // 6. 메시 패널 머티리얼 설정
+        Renderer meshRenderer = meshPanel.GetComponent<Renderer>();
+        portalMaterial = new Material(Shader.Find("Unlit/Texture")); // Unlit 셰이더 사용
+        portalMaterial.mainTexture = portalTexture;
+        meshRenderer.material = portalMaterial;
+
+        // 7. 컬링 설정 (양면 렌더링)
+        portalMaterial.SetFloat("_Cull", (float)UnityEngine.Rendering.CullMode.Off);
+
+        // 8. 카메라 설정
         portalCamera.enabled = false;
     }
 
@@ -36,6 +73,7 @@ public class Portal : MonoBehaviour
     {
         if (canTeleport && (teleportLayerMask.value & (1 << other.gameObject.layer)) != 0)
         {
+            Debug.Log("이동합니다");
             TeleportPlayer(other.transform);
         }
     }
@@ -76,7 +114,7 @@ public class Portal : MonoBehaviour
         Vector3 newPosition = otherPortal.TransformPoint(-localPosition);
 
         // 3. 위치 보정
-        newPosition += otherPortal.forward * 1f; // teleportOffset 이 삭제되었으므로 1f 로 하드 코딩
+        newPosition += otherPortal.forward * 0.1f;
 
         // 카메라 앞쪽으로 이동
         Transform currentCameraTransform = portalCamera.transform;
@@ -128,7 +166,7 @@ public class Portal : MonoBehaviour
         }
 
         portalCamera.transform.position = otherPortal.position;
-        portalCamera.transform.rotation = otherPortal.rotation * Quaternion.Euler(-90f, 0f, 0f);
+        portalCamera.transform.rotation = otherPortal.rotation * Quaternion.Euler(0f, 0f, 0f);
 
         portalCamera.enabled = true;
         portalCamera.Render();
@@ -143,6 +181,20 @@ public class Portal : MonoBehaviour
         float distance = 1f;
         float fov = 2 * Mathf.Atan(portalWidth / (2 * distance)) * Mathf.Rad2Deg;
         portalCamera.fieldOfView = fov;
+    }
+    void OnDestroy()
+    {
+        // 메시 패널 삭제
+        if (meshPanel != null)
+        {
+            Destroy(meshPanel);
+        }
+
+        // 렌더 텍스처 해제
+        if (portalTexture != null)
+        {
+            portalTexture.Release();
+        }
     }
 }
 

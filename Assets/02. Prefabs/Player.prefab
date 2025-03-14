@@ -2206,8 +2206,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c5b7093daf0ac4e93a839c45f2748e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portalAPrefab: {fileID: 8049701388017496905, guid: a859007ccf60f604b82ef9a08035bad1, type: 3}
-  portalBPrefab: {fileID: 8597603700312921601, guid: 86321ffc5d350e645a73264b88441a94, type: 3}
+  portalAPrefab: {fileID: 3482927403541421869, guid: 4f6d5e5611866374c9e0971adc8a6576, type: 3}
+  portalBPrefab: {fileID: 5696198789575743857, guid: 1c73c3de277f33248bf304740d598e42, type: 3}
   maxSpawnDistance: 100
   portalSpawnLayer:
     serializedVersion: 2
