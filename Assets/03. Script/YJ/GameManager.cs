@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -20,6 +21,14 @@ public class GameManager : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject startPosition;
     public UIManager uiManager;
+    public SoundManager soundManager;
+
+    private float mouseSensitivty;
+    public float MouseSensitivty
+    {
+        get { return mouseSensitivty; }
+        set { mouseSensitivty = Mathf.Clamp01(value); }
+    }
 
     private void Awake()
     {
@@ -41,12 +50,18 @@ public class GameManager : MonoBehaviour
     {
         playerPrefab = Resources.Load<GameObject>("Player");
         StageChanger changerObject = new GameObject("StageChanger").AddComponent<StageChanger>();
-        UIManager uIManager = new GameObject("UIManager").AddComponent<UIManager>();
+        UIManager uIObject = new GameObject("UIManager").AddComponent<UIManager>();
+        SoundManager soundObject = new GameObject("SoundManager").AddComponent<SoundManager>();
         changerObject.transform.SetParent(transform);
-        uIManager.transform.SetParent(transform);
+        uIObject.transform.SetParent(transform);
+        soundObject.transform.SetParent(transform);
         stageChanger = GetComponentInChildren<StageChanger>();
         uiManager = GetComponentInChildren<UIManager>();
-        PlayerCreate();
+        soundManager = GetComponentInChildren<SoundManager>();
+        soundManager.Init();
+
+        soundManager.PlayBGM(0);
+        uiManager.ShowUI<MainUI>();
     }
 
     public void PlayerCreate()
