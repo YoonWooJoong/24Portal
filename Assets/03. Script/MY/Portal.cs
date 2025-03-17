@@ -5,23 +5,30 @@ using UnityEngine;
 public class Portal : MonoBehaviour
 {
     public Transform otherPortal;
-    public int recursionLimit = 3; // 최대 재귀 깊이
-    public Camera portalCamera; // 포탈 카메라
-    public float cameraForwardOffset = 0.5f;
-    public RenderTexture portalTexture; // 렌더 텍스처
-    public LayerMask teleportLayerMask; // 텔레포트 가능한 레이어 마스크
+    public int recursionLimit = 3;
+    public Camera portalCamera;
+    public float cameraForwardOffset = 0.0f;
+    public RenderTexture portalTexture;
+    public LayerMask teleportLayerMask;
+    public float teleportSafetyRadius = 0.5f;
+    public float defaultYOffset = 0.1f;
+    public float maxRaycastDistance = 10f;
 
-    private static int currentRecursionDepth = 0; // 현재 재귀 깊이
+    public LayerMask occlusionLayer;
+
+    public bool invertRotation = false; // 회전 반전 여부 (기본값: false)
+    public bool useLocalUp = true; // 로컬 Up 벡터 사용 여부
+
+    private static int currentRecursionDepth = 0;
     private bool canTeleport = true;
-
-    private Renderer meshRenderer; // MeshRenderer 컴포넌트
+    private Renderer meshRenderer;
+    private Collider playerCollider;
 
     void Start()
     {
         portalTexture = new RenderTexture(512, 256, 16);
         portalCamera.targetTexture = portalTexture;
 
-        // MeshRenderer 컴포넌트 가져오기
         meshRenderer = GetComponentInChildren<Renderer>();
         if (meshRenderer == null)
         {
@@ -30,22 +37,15 @@ public class Portal : MonoBehaviour
             return;
         }
 
-        // 초기 텍스처 설정
         meshRenderer.material.mainTexture = portalTexture;
-
-        // 8. 카메라 설정
         portalCamera.enabled = false;
-
-        // *** 추가: 초기 시야각 설정 ***
         UpdateFOV();
     }
 
     void Update()
     {
-        UpdateFOV();
         RenderPortalView();
 
-        // 렌더 텍스처 업데이트
         if (meshRenderer.material.mainTexture != portalTexture)
         {
             meshRenderer.material.mainTexture = portalTexture;
@@ -57,6 +57,7 @@ public class Portal : MonoBehaviour
         if (canTeleport && (teleportLayerMask.value & (1 << other.gameObject.layer)) != 0)
         {
             Debug.Log("이동합니다");
+            playerCollider = other;
             TeleportPlayer(other.transform);
         }
     }
@@ -83,9 +84,10 @@ public class Portal : MonoBehaviour
             yield break;
         }
 
-        // 텔레포트 전 속도 저장 및 초기화
+        // 텔레포트 전 상태 저장
         Vector3 previousVelocity = rb.velocity;
         Vector3 previousAngularVelocity = rb.angularVelocity;
+        Quaternion previousRotation = player.rotation;
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
@@ -97,44 +99,80 @@ public class Portal : MonoBehaviour
         Vector3 newPosition = otherPortal.TransformPoint(-localPosition);
 
         // 3. 위치 보정
-        newPosition += otherPortal.forward * 0.1f;
+        newPosition += otherPortal.forward * cameraForwardOffset;
 
-        // 카메라 앞쪽으로 이동
-        Transform currentCameraTransform = portalCamera.transform;
-        newPosition += currentCameraTransform.forward * cameraForwardOffset;
+        // 4. Raycast 방향 설정
+        Vector3 raycastDirection = useLocalUp ? -otherPortal.up : Vector3.down;
 
-        float yOffset = 0.2f;
-        float xOffset = 0.6f;
+        // 5. 레이캐스트를 사용하여 안전한 위치 찾기
         RaycastHit hit;
-        if (Physics.Raycast(newPosition, Vector3.down, out hit, 10f))
+        bool raycastSuccess = Physics.Raycast(newPosition, raycastDirection, out hit, maxRaycastDistance, ~teleportLayerMask);
+
+        if (raycastSuccess)
         {
-            newPosition.y = hit.point.y + yOffset;
-            newPosition.x = hit.point.x + xOffset;
+            newPosition.y = hit.point.y + defaultYOffset;
         }
         else
         {
-            Debug.LogWarning("레이캐스트 실패: 안전을 위해 기본 높이 사용");
-            newPosition.y += yOffset;
-        }
-        Quaternion newRotation = currentCameraTransform.rotation;
+            Debug.LogWarning("레이캐스트 실패: 안전을 위해 주변 탐색");
+            Collider[] colliders = Physics.OverlapSphere(newPosition, teleportSafetyRadius, ~teleportLayerMask);
+            float highestPoint = float.NegativeInfinity;
 
-        // 위치 및 회전 적용
+            foreach (Collider collider in colliders)
+            {
+                if (useLocalUp)
+                {
+                    Vector3 colliderPoint = collider.ClosestPoint(newPosition);
+                    if (Vector3.Dot(otherPortal.up, colliderPoint - newPosition) > 0 && colliderPoint.y > highestPoint)
+                    {
+                        highestPoint = colliderPoint.y;
+                    }
+                }
+                else
+                {
+                    if (collider.bounds.max.y > highestPoint)
+                    {
+                        highestPoint = collider.bounds.max.y;
+                    }
+                }
+            }
+
+            if (highestPoint > float.NegativeInfinity)
+            {
+                newPosition.y = highestPoint + defaultYOffset;
+            }
+            else
+            {
+                Debug.LogWarning("주변에 안전한 위치를 찾을 수 없음: 기본 높이 사용");
+                newPosition.y += defaultYOffset;
+            }
+        }
+                
+        Quaternion portalRotationDifference = Quaternion.Inverse(transform.rotation) * otherPortal.rotation;                
+        Vector3 rotationDifferenceEuler = portalRotationDifference.eulerAngles;
+        Quaternion yRotation = Quaternion.Euler(0, rotationDifferenceEuler.y, 0);        
+        Quaternion newRotation = yRotation;         
+        float dotProduct = Vector3.Dot(transform.up, otherPortal.up);
+        if (useLocalUp && dotProduct < -0.99f) 
+        {        
+            
+            newPosition.y -= 0.5f;
+        }
+        
+        if (invertRotation)
+        {
+            Vector3 eulerAngles = newRotation.eulerAngles;
+            eulerAngles.y += 180f;
+            newRotation = Quaternion.Euler(eulerAngles);
+        }
+                
         rb.position = newPosition;
         player.rotation = newRotation;
-
-        // 5. 충돌 방지 (레이어 사용)
-        player.gameObject.layer = LayerMask.NameToLayer("Teleporting");
-        yield return new WaitForSeconds(0.8f);
-        player.gameObject.layer = LayerMask.NameToLayer("Player");
-
-        // 6. 딜레이 시간 동안 대기
-        yield return new WaitForSeconds(0.1f);
-
-        // 속도 다시 적용
-        rb.velocity = previousVelocity;
+               
+        rb.velocity = portalRotationDifference * previousVelocity;
         rb.angularVelocity = previousAngularVelocity;
 
-        yield return new WaitForSeconds(0.8f);
+        
         canTeleport = true;
     }
 
@@ -160,8 +198,7 @@ public class Portal : MonoBehaviour
 
     void UpdateFOV()
     {
-        // *** 변경: meshPanel이 Sphere이므로, 시야각을 고정값으로 설정 ***
-        portalCamera.fieldOfView = 60f; // 적절한 시야각 값으로 조정
+        portalCamera.fieldOfView = 60f;
     }
 }
 
