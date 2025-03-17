@@ -5,12 +5,8 @@ using UnityEngine;
 
 public class AchieveManager : MonoBehaviour
 {
-    public static AchieveManager Instance;
-
     private Dictionary<string, Achievement> achievementDic;
-
     public GameObject AchievePopUpPrefab;
-
 
     public GameObject AchieveContainer;
     public RectTransform AchieveUI;
@@ -19,11 +15,6 @@ public class AchieveManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-
         achievementDic = new Dictionary<string, Achievement>();
         
         InitAchievement();
@@ -32,12 +23,7 @@ public class AchieveManager : MonoBehaviour
 
     private void Start()
     {
-        AchieveContainer = Instantiate(AchievePopUpPrefab);
-        AchieveUI = AchieveContainer.transform.GetChild(0).GetComponentInChildren<RectTransform>();
-        AchieveUI.transform.position = AchieveUI.transform.position - new Vector3(0, 100);
-        achieveName = AchieveUI.gameObject.GetComponentsInChildren<TextMeshProUGUI>()[0];
-        achieveDescription = AchieveUI.gameObject.GetComponentsInChildren<TextMeshProUGUI>()[1];
-        
+        ClearButton();
     }
 
     private void InitAchievement()
@@ -78,6 +64,11 @@ public class AchieveManager : MonoBehaviour
     /// </summary>
     public void UnLockAchievement(string name)
     {
+        AchieveContainer = Instantiate(AchievePopUpPrefab);
+        AchieveUI = AchieveContainer.transform.GetChild(0).GetComponentInChildren<RectTransform>();
+        achieveName = AchieveUI.gameObject.GetComponentsInChildren<TextMeshProUGUI>()[0];
+        achieveDescription = AchieveUI.gameObject.GetComponentsInChildren<TextMeshProUGUI>()[1];
+
         if (achievementDic.ContainsKey(name) && !achievementDic[name].isCleared)
         {
             achievementDic[name].isCleared = true;

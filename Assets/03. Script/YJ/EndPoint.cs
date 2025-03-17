@@ -33,6 +33,7 @@ public class EndPoint : MonoBehaviour
 
     IEnumerator DelayNextScene()
     {
+        GameManager.Instance.achieveManager.UnLockAchievement("Teleport");
         yield return new WaitForSeconds(2);
         GameManager.Instance.stageChanger.NextScene();
         PlayerPrefs.SetInt("Level", SceneManager.GetActiveScene().buildIndex + 1);

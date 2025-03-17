@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public GameObject startPosition;
     public UIManager uiManager;
     public SoundManager soundManager;
+    public AchieveManager achieveManager;
     public int sceneLoadIndex;
 
     private float mouseSensitivty;
@@ -59,6 +60,7 @@ public class GameManager : MonoBehaviour
         stageChanger = GetComponentInChildren<StageChanger>();
         uiManager = GetComponentInChildren<UIManager>();
         soundManager = GetComponentInChildren<SoundManager>();
+        achieveManager = GetComponentInChildren<AchieveManager>();
         soundManager.Init();
 
         soundManager.PlayBGM(0);
