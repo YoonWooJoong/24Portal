@@ -6,12 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class StageChanger : MonoBehaviour
 {
+
     /// <summary>
     /// 씬 재시작
     /// </summary>
     public void RestartScene()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        GameManager.Instance.sceneLoadIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(0);
     }
 
     /// <summary>
@@ -22,17 +24,12 @@ public class StageChanger : MonoBehaviour
     {
         if (Application.CanStreamedLevelBeLoaded(SceneManager.GetActiveScene().buildIndex + 1))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            StartCoroutine(SpawnPlayerDelay());
+            GameManager.Instance.sceneLoadIndex = SceneManager.GetActiveScene().buildIndex + 1;
+            SceneManager.LoadScene(0);
         }
-
         else { Debug.LogWarning("다음씬이 없습니다."); }
     }
-    IEnumerator SpawnPlayerDelay()
-    {
-        yield return new WaitForSeconds(0.1f);
-        GameManager.Instance.PlayerCreate();
-    }
+
 
     /// <summary>
     /// 저장된 씬 불러오기
@@ -40,24 +37,9 @@ public class StageChanger : MonoBehaviour
     /// <param name="buildindex">저장된씬 인덱스</param>
     public void LoadScene(int buildindex)
     {
-        SceneManager.LoadScene(buildindex);
-        StartCoroutine(SpawnPlayerDelay());
-    }
-
-    /// <summary>
-    /// 맨 처음 씬으로 이동
-    /// </summary>
-    public void GoFirstScene()
-    {
+        GameManager.Instance.sceneLoadIndex = buildindex;
         SceneManager.LoadScene(0);
+
     }
 
-    /// <summary>
-    /// 선택한 씬을 불러오는 역할
-    /// </summary>
-    /// <param name="index"></param>
-    public void ChoiceScene(int index)
-    {
-        SceneManager.LoadScene(index);
-    }
 }

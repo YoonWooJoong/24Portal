@@ -48,7 +48,7 @@ public class PortalSpawner : MonoBehaviour
 
             Portal portalScript = newPortal.GetComponent<Portal>();
 
-            Quaternion additionalRotation = Quaternion.Euler(90f, 0f, 0f);
+            Quaternion additionalRotation = Quaternion.Euler(0f, 0f, 0f);
             portal.transform.rotation = Quaternion.LookRotation(hitPortalLayer.normal) * additionalRotation;
             ConnectPortals();
         }

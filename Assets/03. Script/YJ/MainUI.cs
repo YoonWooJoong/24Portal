@@ -190,7 +190,7 @@ public class MainUI : BaseUI
         if (ClearLevel >= currentMapLevel)
         {
             GameManager.Instance.uiManager.HideUI<MainUI>();
-            GameManager.Instance.stageChanger.LoadScene(currentMapLevel - 1);
+            GameManager.Instance.stageChanger.LoadScene(currentMapLevel);
             Cursor.lockState = CursorLockMode.Locked;
         }
         else
