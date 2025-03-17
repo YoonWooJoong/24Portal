@@ -64,10 +64,13 @@ public class AchieveManager : MonoBehaviour
     /// </summary>
     public void UnLockAchievement(string name)
     {
-        AchieveContainer = Instantiate(AchievePopUpPrefab);
-        AchieveUI = AchieveContainer.transform.GetChild(0).GetComponentInChildren<RectTransform>();
-        achieveName = AchieveUI.gameObject.GetComponentsInChildren<TextMeshProUGUI>()[0];
-        achieveDescription = AchieveUI.gameObject.GetComponentsInChildren<TextMeshProUGUI>()[1];
+        if (AchieveContainer == null)
+        {
+            AchieveContainer = Instantiate(AchievePopUpPrefab);
+            AchieveUI = AchieveContainer.transform.GetChild(0).GetComponentInChildren<RectTransform>();
+            achieveName = AchieveUI.gameObject.GetComponentsInChildren<TextMeshProUGUI>()[0];
+            achieveDescription = AchieveUI.gameObject.GetComponentsInChildren<TextMeshProUGUI>()[1];
+        }
 
         if (achievementDic.ContainsKey(name) && !achievementDic[name].isCleared)
         {
