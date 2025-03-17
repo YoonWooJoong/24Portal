@@ -125,7 +125,7 @@ public class Turret : MonoBehaviour
                 Debug.Log("플레이어가 가려져 공격 불가");
             }
         }
-        Debug.Log($"현재 attackTimer: {attackTimer}, attackCooldown: {attackCooldown}");
+      //  Debug.Log($"현재 attackTimer: {attackTimer}, attackCooldown: {attackCooldown}");
     }
 
     /// <summary>
@@ -138,12 +138,12 @@ public class Turret : MonoBehaviour
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         rb.AddForce(gunBarrel.forward * bulletForce, ForceMode.VelocityChange);  // 총알 발사
     }
-    void OnDrawGizmos()
-    {
-        // 감지 범위를 빨간색 원으로 표시
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectionRange); // 감지 범위 원 그리기
-    }
+   // void OnDrawGizmos()
+   // {
+   //     // 감지 범위를 빨간색 원으로 표시
+   //     Gizmos.color = Color.red;
+   //     Gizmos.DrawWireSphere(transform.position, detectionRange); // 감지 범위 원 그리기
+   // }
 
     /// <summary>
     /// 플레이어와 터렛 사이에 장애물이 있는지 확인하는 함수
