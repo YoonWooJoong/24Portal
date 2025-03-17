@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class AchieveManager : MonoBehaviour
@@ -9,6 +10,8 @@ public class AchieveManager : MonoBehaviour
     private Dictionary<string, Achievement> achievementDic;
 
     public RectTransform AchieveUI;
+    public TextMeshProUGUI achieveName;
+    public TextMeshProUGUI achieveDescription;
 
     private void Awake()
     {
@@ -61,23 +64,55 @@ public class AchieveManager : MonoBehaviour
     /// </summary>
     public void UnLockAchievement(string name)
     {
-        if(achievementDic.ContainsKey(name) && !achievementDic[name].isCleared)
+        if (achievementDic.ContainsKey(name) && !achievementDic[name].isCleared)
         {
             achievementDic[name].isCleared = true;
             SaveAchievement();
-            //StartCoroutine(UpUI);
+            achieveName.text = name;
+            achieveDescription.text = achievementDic[name]._description;
 
-            //UI 화면 띄우는 연출 추가
-        } 
+
+            StartCoroutine(UpUI());
+        }
     }
 
     private IEnumerator UpUI()
     {
-        yield return null;
+        for(int i = 0; i < 100; i++)
+        {
+            AchieveUI.transform.position = AchieveUI.transform.position + new Vector3(0, 1, 0);
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(1f);
+        StartCoroutine(DownUI());
     }
 
-    private void DownUI()
+    private IEnumerator DownUI()
     {
+        for (int i = 0; i < 100; i++)
+        {
+            AchieveUI.transform.position = AchieveUI.transform.position + new Vector3(0, -1, 0);
+            yield return null;
+        }
 
+        achieveName.text = null;
+        achieveDescription.text = null;
+    }
+
+    public void TestButton()
+    {
+        UnLockAchievement("FirstClear");
+    }
+
+    public void ClearButton()
+    {
+        foreach (var achieve in achievementDic)
+        {
+            if (PlayerPrefs.HasKey(achieve.Key) )
+            {
+                achievementDic[achieve.Key].isCleared = false;
+            }
+        }
     }
 }

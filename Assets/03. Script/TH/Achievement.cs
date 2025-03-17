@@ -5,8 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class Achievement
 {
-    private string _name;
-    private string _description;
+    public string _name;
+    public string _description;
     public bool isCleared;
 
     public Achievement(string name, string description, bool isCleared) 
