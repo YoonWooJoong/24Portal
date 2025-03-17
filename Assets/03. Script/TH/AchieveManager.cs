@@ -100,7 +100,8 @@ public class AchieveManager : MonoBehaviour
     {
         for (int i = 0; i < 100; i++)
         {
-            AchieveUI.transform.position = AchieveUI.transform.position + new Vector3(0, -1, 0);
+            if(AchieveUI != null)
+                AchieveUI.transform.position = AchieveUI.transform.position + new Vector3(0, -1, 0);
             yield return null;
         }
 

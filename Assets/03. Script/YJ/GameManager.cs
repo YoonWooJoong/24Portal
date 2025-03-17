@@ -46,10 +46,7 @@ public class GameManager : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-    }
 
-    private void Start()
-    {
         playerPrefab = Resources.Load<GameObject>("Player");
         StageChanger changerObject = new GameObject("StageChanger").AddComponent<StageChanger>();
         UIManager uIObject = new GameObject("UIManager").AddComponent<UIManager>();
@@ -61,10 +58,13 @@ public class GameManager : MonoBehaviour
         uiManager = GetComponentInChildren<UIManager>();
         soundManager = GetComponentInChildren<SoundManager>();
         achieveManager = GetComponentInChildren<AchieveManager>();
+    }
+
+    private void Start()
+    {
         soundManager.Init();
 
         soundManager.PlayBGM(0);
-        uiManager.ShowUI<MainUI>();
     }
 
     public void PlayerCreate()
