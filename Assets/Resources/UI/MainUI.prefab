@@ -1525,9 +1525,11 @@ MonoBehaviour:
   selectLevelUI: {fileID: 4517484728193915731}
   mapImage: {fileID: 6468932274375619467}
   mapSprites:
-  - {fileID: 21300000, guid: 0cf85da5aff6b8047a903a724a1c4798, type: 3}
-  - {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 21300000, guid: 26dcdd8edd814ab4ab6be9d679983bb1, type: 3}
+  - {fileID: 21300000, guid: 488aeb05653961344a3a9634309ba09c, type: 3}
+  - {fileID: 21300000, guid: 7096757de0aecac4eb22da12f8592689, type: 3}
+  - {fileID: 21300000, guid: 8b9f8f5db7910604b825e9e01c8866cb, type: 3}
+  - {fileID: 21300000, guid: b49c473cc61df40408b9adc4390c42f2, type: 3}
   mapLevelText: {fileID: 7428289287423938330}
   rightButton: {fileID: 9184365094448878064}
   leftButton: {fileID: 7585473933596035295}
