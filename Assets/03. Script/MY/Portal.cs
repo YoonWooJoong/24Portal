@@ -23,6 +23,7 @@ public class Portal : MonoBehaviour
     private bool canTeleport = true;
     private Renderer meshRenderer;
     private Collider playerCollider;
+    
 
     void Start()
     {
@@ -177,7 +178,7 @@ public class Portal : MonoBehaviour
 
             if (highestPoint > float.NegativeInfinity)
             {
-                newPosition.y = highestPoint + defaultYOffset;
+                newPosition.y = hit.point.y + defaultYOffset;
             }
             else
             {
@@ -185,32 +186,22 @@ public class Portal : MonoBehaviour
                 newPosition.y += defaultYOffset;
             }
         }
-                
-        Quaternion portalRotationDifference = Quaternion.Inverse(transform.rotation) * otherPortal.rotation;                
-        Vector3 rotationDifferenceEuler = portalRotationDifference.eulerAngles;
-        Quaternion yRotation = Quaternion.Euler(0, rotationDifferenceEuler.y, 0);        
-        Quaternion newRotation = yRotation;         
-        float dotProduct = Vector3.Dot(transform.up, otherPortal.up);
-        if (useLocalUp && dotProduct < -0.99f) 
-        {        
-            
-            newPosition.y -= 0.5f;
-        }
-        
-        if (invertRotation)
-        {
-            Vector3 eulerAngles = newRotation.eulerAngles;
-            eulerAngles.y += 180f;
-            newRotation = Quaternion.Euler(eulerAngles);
-        }
-                
-        rb.position = newPosition;
-        player.rotation = newRotation;
-               
-        rb.velocity = portalRotationDifference * previousVelocity;
-        rb.angularVelocity = previousAngularVelocity;
 
         
+        Quaternion portalRot = otherPortal.rotation;
+        Quaternion portalYRot = Quaternion.Euler(0, otherPortal.eulerAngles.y, 0);
+        Quaternion yInvertedRotation = Quaternion.Inverse(portalYRot);
+
+        //회전 적용
+        Quaternion newRotation = yInvertedRotation * previousRotation;
+
+        // 위치 및 회전 적용
+        rb.position = newPosition;
+        player.rotation = yInvertedRotation;
+
+        // 속도 보정        
+        rb.angularVelocity = previousAngularVelocity;
+
         canTeleport = true;
     }
 
