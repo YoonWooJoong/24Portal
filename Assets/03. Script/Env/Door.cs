@@ -6,6 +6,9 @@ public class Door : MonoBehaviour
 {
     public Animator anim;
     bool isOpen;
+    /// <summary>
+    /// 열리는 프로퍼티
+    /// </summary>
     public bool IsOpen
     {
         get { return isOpen; }
