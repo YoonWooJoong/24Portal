@@ -9,6 +9,10 @@ public class AchieveManager : MonoBehaviour
 
     private Dictionary<string, Achievement> achievementDic;
 
+    public GameObject AchievePopUpPrefab;
+
+
+    public GameObject AchieveContainer;
     public RectTransform AchieveUI;
     public TextMeshProUGUI achieveName;
     public TextMeshProUGUI achieveDescription;
@@ -21,9 +25,19 @@ public class AchieveManager : MonoBehaviour
             Destroy(gameObject);
 
         achievementDic = new Dictionary<string, Achievement>();
-
+        
         InitAchievement();
         LoadAchievement();
+    }
+
+    private void Start()
+    {
+        AchieveContainer = Instantiate(AchievePopUpPrefab);
+        AchieveUI = AchieveContainer.transform.GetChild(0).GetComponentInChildren<RectTransform>();
+        AchieveUI.transform.position = AchieveUI.transform.position - new Vector3(0, 100);
+        achieveName = AchieveUI.gameObject.GetComponentsInChildren<TextMeshProUGUI>()[0];
+        achieveDescription = AchieveUI.gameObject.GetComponentsInChildren<TextMeshProUGUI>()[1];
+        
     }
 
     private void InitAchievement()
@@ -70,7 +84,7 @@ public class AchieveManager : MonoBehaviour
             SaveAchievement();
             achieveName.text = name;
             achieveDescription.text = achievementDic[name]._description;
-
+            Debug.Log(achieveDescription.text);
 
             StartCoroutine(UpUI());
         }
