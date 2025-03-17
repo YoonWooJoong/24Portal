@@ -35,32 +35,44 @@ public class PortalSpawner : MonoBehaviour
         
         bool hasHitAll = Physics.Raycast(ray, out hitAll, maxSpawnDistance);       
         bool hasHitPortalLayer = Physics.Raycast(ray, out hitPortalLayer, maxSpawnDistance, portalSpawnLayer);
-        
+
         if (hasHitPortalLayer && (!hasHitAll || hitPortalLayer.distance <= hitAll.distance))
-        {            
+        {
             if (portal != null)
             {
                 Destroy(portal);
             }
-            Vector3 spawnPosition = hitPortalLayer.point + hitPortalLayer.normal * 0.01f;            
+            Vector3 spawnPosition = hitPortalLayer.point + hitPortalLayer.normal * 0.01f;
             GameObject newPortal = Instantiate(prefab, spawnPosition, Quaternion.identity);
             portal = newPortal;
-
             Portal portalScript = newPortal.GetComponent<Portal>();
+                        
+            bool isFloor = Mathf.Abs(Vector3.Dot(hitPortalLayer.normal, Vector3.up)) > 0.9f;
+            Quaternion finalRotation = Quaternion.identity;           
+            finalRotation = Quaternion.LookRotation(hitPortalLayer.normal);
 
-            Quaternion additionalRotation = Quaternion.Euler(0f, 0f, 0f);
-            portal.transform.rotation = Quaternion.LookRotation(hitPortalLayer.normal) * additionalRotation;
+            if (isFloor)
+            {               
+                Vector3 playerPosition = Camera.main.transform.position;
+                Vector3 portalToPlayer = playerPosition - spawnPosition;
+                portalToPlayer.y = 0;                
+                Quaternion playerYRotation = Quaternion.LookRotation(portalToPlayer);                               
+                Vector3 rotationEuler = finalRotation.eulerAngles;
+                finalRotation = Quaternion.Euler(rotationEuler.x, playerYRotation.eulerAngles.y, rotationEuler.z);
+            }           
+            portal.transform.rotation = finalRotation;
             ConnectPortals();
         }
         else
         {
             Debug.Log("포탈을 생성할 수 있는 위치를 찾지 못했습니다.");
         }
+    
+        
     }
 
     void ConnectPortals()
-    {
-        // 포탈 A와 B가 모두 생성되었는지 확인
+    {       
         if (portalA == null || portalB == null) return;
 
         Portal portalAScript = portalA.GetComponent<Portal>();
@@ -74,8 +86,7 @@ public class PortalSpawner : MonoBehaviour
         {
             portalBScript = portalB.AddComponent<Portal>();
         }
-
-        // portalA와 portalB가 null이 아닌지 확인
+                
         if (portalAScript != null && portalBScript != null)
         {
             portalAScript.otherPortal = portalB.transform;

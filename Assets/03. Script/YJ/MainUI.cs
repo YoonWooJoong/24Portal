@@ -51,6 +51,11 @@ public class MainUI : BaseUI
         
     }
 
+    public override void OnShow()
+    {
+        base.OnShow();
+        Initialize();
+    }
 
     public override void Initialize()
     {

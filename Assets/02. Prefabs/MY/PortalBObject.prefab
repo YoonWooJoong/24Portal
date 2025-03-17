@@ -57,6 +57,14 @@ MonoBehaviour:
   teleportLayerMask:
     serializedVersion: 2
     m_Bits: 9216
+  teleportSafetyRadius: 0.5
+  defaultYOffset: 0.1
+  maxRaycastDistance: 10
+  occlusionLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  invertRotation: 0
+  useLocalUp: 1
 --- !u!65 &61227135704723229
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -77,7 +85,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1.5, z: 0.05}
-  m_Center: {x: 0, y: 0.2, z: 0.1}
+  m_Center: {x: 0, y: 0.2, z: 0.12}
 --- !u!114 &-3595616719255593789
 MonoBehaviour:
   m_ObjectHideFlags: 0
