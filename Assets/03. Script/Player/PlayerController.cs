@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviour
     private Animator _animator;
     private PortalSpawner portalSpawner;
 
+    private bool isLock;
+
     /// <summary>
     /// 좌 혹은 우 클릭시 실행
     /// </summary>
@@ -160,6 +162,20 @@ public class PlayerController : MonoBehaviour
         {
             moveSpeed = walkSpeed;
             _animator.SetBool("IsRun", false);
+        }
+    }
+
+    public void OnMouseRock(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started && isLock)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            isLock = false;
+        }
+        else if (context.phase == InputActionPhase.Started && !isLock)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            isLock = true;
         }
     }
 }

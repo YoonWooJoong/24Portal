@@ -7,5 +7,6 @@ public class ScreenManager : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.PlayerCreate();
+        GameManager.Instance.uiManager.ShowUI<InGameUI>();
     }
 }
