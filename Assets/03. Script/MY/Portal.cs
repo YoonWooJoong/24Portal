@@ -73,7 +73,6 @@ public class Portal : MonoBehaviour
 
     IEnumerator TeleportBulletCoroutine(Transform bullet)
     {
-        // 1. 로컬 위치 계산
         Vector3 localPosition = transform.InverseTransformPoint(bullet.position);
 
         // 2. 새로운 위치 계산
@@ -85,18 +84,18 @@ public class Portal : MonoBehaviour
         // 4. 회전 보정: 포탈 회전 차이 계산
         Quaternion portalRotationDifference = Quaternion.Inverse(transform.rotation) * otherPortal.rotation;
 
-        // 5. 회전 보정: 새로운 방향 설정 (y축만)
-        Vector3 newDirection = portalRotationDifference * bullet.forward;
+        // 5. 카메라가 보는 방향으로 회전 설정
+        Quaternion newRotation = Quaternion.LookRotation(portalCamera.transform.forward);
 
         // 6. 위치 및 회전 적용
         bullet.position = newPosition;
-        bullet.rotation = Quaternion.LookRotation(newDirection);
+        bullet.rotation = newRotation;
 
-        // 7. 속도 보정 (선택 사항): 속도도 회전시켜야 할 경우
+        // 7. 속도 보정 (카메라 방향으로)
         Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
         if (bulletRb != null)
         {
-            bulletRb.velocity = portalRotationDifference * bulletRb.velocity;
+            bulletRb.velocity = portalCamera.transform.forward * bulletRb.velocity.magnitude; // 기존 속도 크기 유지
         }
 
         yield return null; // 다음 프레임까지 대기
