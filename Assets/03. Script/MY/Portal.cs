@@ -2,39 +2,61 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class Portal : MonoBehaviour
 {
-    public Transform otherPortal;    
+    public Transform otherPortal;
     public int recursionLimit = 3; // 최대 재귀 깊이
     public Camera portalCamera; // 포탈 카메라
-    public float cameraForwardOffset = 1.5f;
-    public RenderTexture portalTexture; // 렌더 텍스처   
-
+    public float cameraForwardOffset = 0.5f;
+    public RenderTexture portalTexture; // 렌더 텍스처
+    public LayerMask teleportLayerMask; // 텔레포트 가능한 레이어 마스크
 
     private static int currentRecursionDepth = 0; // 현재 재귀 깊이
     private bool canTeleport = true;
 
+    private Renderer meshRenderer; // MeshRenderer 컴포넌트
+
     void Start()
     {
-        portalTexture = new RenderTexture(256, 256, 16);
+        portalTexture = new RenderTexture(512, 256, 16);
         portalCamera.targetTexture = portalTexture;
-        GetComponent<Renderer>().material.mainTexture = portalTexture;
 
-        UpdateFOV();
+        // MeshRenderer 컴포넌트 가져오기
+        meshRenderer = GetComponentInChildren<Renderer>();
+        if (meshRenderer == null)
+        {
+            Debug.LogError("MeshRenderer 컴포넌트가 없습니다!");
+            enabled = false;
+            return;
+        }
+
+        // 초기 텍스처 설정
+        meshRenderer.material.mainTexture = portalTexture;
+
+        // 8. 카메라 설정
         portalCamera.enabled = false;
+
+        // *** 추가: 초기 시야각 설정 ***
+        UpdateFOV();
     }
 
     void Update()
     {
         UpdateFOV();
         RenderPortalView();
+
+        // 렌더 텍스처 업데이트
+        if (meshRenderer.material.mainTexture != portalTexture)
+        {
+            meshRenderer.material.mainTexture = portalTexture;
+        }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && canTeleport)
+        if (canTeleport && (teleportLayerMask.value & (1 << other.gameObject.layer)) != 0)
         {
+            Debug.Log("이동합니다");
             TeleportPlayer(other.transform);
         }
     }
@@ -75,7 +97,7 @@ public class Portal : MonoBehaviour
         Vector3 newPosition = otherPortal.TransformPoint(-localPosition);
 
         // 3. 위치 보정
-        newPosition += otherPortal.forward * 1f; // teleportOffset 이 삭제되었으므로 1f 로 하드 코딩
+        newPosition += otherPortal.forward * 0.1f;
 
         // 카메라 앞쪽으로 이동
         Transform currentCameraTransform = portalCamera.transform;
@@ -103,7 +125,7 @@ public class Portal : MonoBehaviour
         // 5. 충돌 방지 (레이어 사용)
         player.gameObject.layer = LayerMask.NameToLayer("Teleporting");
         yield return new WaitForSeconds(0.8f);
-        player.gameObject.layer = LayerMask.NameToLayer("Default");
+        player.gameObject.layer = LayerMask.NameToLayer("Player");
 
         // 6. 딜레이 시간 동안 대기
         yield return new WaitForSeconds(0.1f);
@@ -127,7 +149,7 @@ public class Portal : MonoBehaviour
         }
 
         portalCamera.transform.position = otherPortal.position;
-        portalCamera.transform.rotation = otherPortal.rotation * Quaternion.Euler(-90f, 0f, 0f);
+        portalCamera.transform.rotation = otherPortal.rotation * Quaternion.Euler(0f, 0f, 0f);
 
         portalCamera.enabled = true;
         portalCamera.Render();
@@ -138,10 +160,9 @@ public class Portal : MonoBehaviour
 
     void UpdateFOV()
     {
-        float portalWidth = transform.localScale.x;
-        float distance = 1f;
-        float fov = 2 * Mathf.Atan(portalWidth / (2 * distance)) * Mathf.Rad2Deg;
-        portalCamera.fieldOfView = fov;
+        // *** 변경: meshPanel이 Sphere이므로, 시야각을 고정값으로 설정 ***
+        portalCamera.fieldOfView = 60f; // 적절한 시야각 값으로 조정
     }
 }
+
 
