@@ -48,15 +48,20 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         moveSpeed = walkSpeed;
+        isLock = true;
     }
 
     private void FixedUpdate()
     {
+        if (!isLock)
+            return;
         Move();
     }
 
     private void LateUpdate()
     {
+        if (!isLock)
+            return;
         Look();
     }
 
@@ -136,7 +141,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnLeftClick(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started)
+        if (context.phase == InputActionPhase.Started && isLock)
         {
             portalSpawner.SpawnPortalA();
         }
@@ -144,7 +149,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnRightClick(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started)
+        if (context.phase == InputActionPhase.Started && isLock)
         {
             portalSpawner.SpawnPortalB();
         }
