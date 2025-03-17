@@ -15,7 +15,7 @@ public class Portal : MonoBehaviour
     public float maxRaycastDistance = 10f;
 
     public LayerMask occlusionLayer;
-
+    public LayerMask bulletLayer; // 총알 레이어
     public bool invertRotation = false; // 회전 반전 여부 (기본값: false)
     public bool useLocalUp = true; // 로컬 Up 벡터 사용 여부
 
@@ -54,14 +54,53 @@ public class Portal : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (canTeleport && (teleportLayerMask.value & (1 << other.gameObject.layer)) != 0)
+        if (((1 << other.gameObject.layer) & bulletLayer) != 0)
+        {
+            Debug.Log("총알이 이동합니다");
+            TeleportBullet(other.transform);
+        }
+            if (canTeleport && (teleportLayerMask.value & (1 << other.gameObject.layer)) != 0)
         {
             Debug.Log("이동합니다");
             playerCollider = other;
             TeleportPlayer(other.transform);
         }
     }
+    void TeleportBullet(Transform bullet)
+    {
+        StartCoroutine(TeleportBulletCoroutine(bullet));
+    }
 
+    IEnumerator TeleportBulletCoroutine(Transform bullet)
+    {
+        // 1. 로컬 위치 계산
+        Vector3 localPosition = transform.InverseTransformPoint(bullet.position);
+
+        // 2. 새로운 위치 계산
+        Vector3 newPosition = otherPortal.TransformPoint(-localPosition);
+
+        // 3. 위치 보정 (다른 포탈 약간 앞)
+        newPosition += otherPortal.forward * 0.5f;
+
+        // 4. 회전 보정: 포탈 회전 차이 계산
+        Quaternion portalRotationDifference = Quaternion.Inverse(transform.rotation) * otherPortal.rotation;
+
+        // 5. 회전 보정: 새로운 방향 설정 (y축만)
+        Vector3 newDirection = portalRotationDifference * bullet.forward;
+
+        // 6. 위치 및 회전 적용
+        bullet.position = newPosition;
+        bullet.rotation = Quaternion.LookRotation(newDirection);
+
+        // 7. 속도 보정 (선택 사항): 속도도 회전시켜야 할 경우
+        Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
+        if (bulletRb != null)
+        {
+            bulletRb.velocity = portalRotationDifference * bulletRb.velocity;
+        }
+
+        yield return null; // 다음 프레임까지 대기
+    }
     void TeleportPlayer(Transform player)
     {
         if (otherPortal == null)

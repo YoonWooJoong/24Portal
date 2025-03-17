@@ -63,6 +63,9 @@ MonoBehaviour:
   occlusionLayer:
     serializedVersion: 2
     m_Bits: 2048
+  bulletLayer:
+    serializedVersion: 2
+    m_Bits: 16384
   invertRotation: 0
   useLocalUp: 1
 --- !u!65 &61227135704723229
