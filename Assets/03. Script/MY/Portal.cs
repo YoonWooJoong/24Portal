@@ -182,15 +182,20 @@ public class Portal : MonoBehaviour
             }
         }
 
-        Quaternion portalRot = otherPortal.rotation;
-        Quaternion portalYRot = Quaternion.Euler(0, otherPortal.eulerAngles.y, 0);
-        Quaternion yInvertedRotation = Quaternion.Inverse(portalYRot);                
-        Quaternion newRotation = yInvertedRotation * previousRotation;
-        
-        rb.position = newPosition;
-        player.rotation = yInvertedRotation;
-             
-        rb.angularVelocity = previousAngularVelocity;
+        if (newPosition.y >= 3f)
+        {
+            newPosition.y -= 1f;
+        }
+        else if (newPosition.y <= 1f)
+        {
+            newPosition.y += 1f;
+        }
+        rb.position = newPosition;        
+        Vector3 portalCameraForward = portalCamera.transform.forward;
+        portalCameraForward.y = 0; 
+        Quaternion targetRotation = Quaternion.LookRotation(portalCameraForward);        
+        player.rotation = targetRotation;        
+        rb.angularVelocity = previousAngularVelocity;        
         canTeleport = true;
     }
     /// <summary>
