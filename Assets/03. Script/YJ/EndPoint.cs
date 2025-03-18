@@ -31,9 +31,12 @@ public class EndPoint : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 2초 후 다음씬으로 넘어가면서 레벨을 저장함
+    /// </summary>
+    /// <returns></returns>
     IEnumerator DelayNextScene()
     {
-        GameManager.Instance.achieveManager.UnLockAchievement("Teleport");
         yield return new WaitForSeconds(2);
         GameManager.Instance.stageChanger.NextScene();
         PlayerPrefs.SetInt("Level", SceneManager.GetActiveScene().buildIndex + 1);

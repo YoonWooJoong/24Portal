@@ -19,10 +19,8 @@ public class ButtonObject : MonoBehaviour
 
     private void Update()
     {
-        //Debug.Log($"{buttonTop.localPosition.y}");
         if (buttonTop.localPosition.y <= pressThreshold)
         {
-            //Debug.Log("눌렸습니다.");
             
             if (!isPressed)
                 isPressed = true;
@@ -31,7 +29,6 @@ public class ButtonObject : MonoBehaviour
         }
         else
         {
-            //Debug.Log("안눌렸습니다.");
             isPressed = false;
 
             OffPressed();

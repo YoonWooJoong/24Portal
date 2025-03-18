@@ -34,6 +34,9 @@ public class InGameUI : BaseUI
         Initialize();
     }
     private bool isInit;
+    /// <summary>
+    /// 초기화
+    /// </summary>
     public override void Initialize()
     {
         base.Initialize();
@@ -47,6 +50,9 @@ public class InGameUI : BaseUI
         backGroundRect.anchoredPosition = backGroundPosition;
     }
 
+    /// <summary>
+    /// 인게임 메뉴버튼 눌렀을때
+    /// </summary>
     private void OnMenuButton()
     {
         if (!isMove)
@@ -71,11 +77,17 @@ public class InGameUI : BaseUI
         }
     }
 
+    /// <summary>
+    /// 재시작버튼 눌렀을때
+    /// </summary>
     private void OnRestartButton()
     {
         GameManager.Instance.stageChanger.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    /// <summary>
+    /// 메인메뉴 눌렀을때
+    /// </summary>
     private void OnMainMenuButton()
     {
         GameManager.Instance.stageChanger.LoadScene(6);

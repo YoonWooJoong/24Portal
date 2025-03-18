@@ -25,7 +25,11 @@ public class LoadingScene : MonoBehaviour
         loadingBar.value = time;
         loadingBarText.transform.GetComponent<TextMeshProUGUI>().text = $"Loading...{(time * 100f).ToString("F2")}%";
     }
-
+    /// <summary>
+    /// ¥Ÿ¿Ωæ¿ ∫Òµø±‚ ∑ŒµÂ
+    /// </summary>
+    /// <param name="index">æ¿¿Œµ¶Ω∫</param>
+    /// <returns></returns>
     IEnumerator LoadScene(int index)
     {
         AsyncOperation op = SceneManager.LoadSceneAsync(index);

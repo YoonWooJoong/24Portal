@@ -57,6 +57,9 @@ public class MainUI : BaseUI
         Initialize();
     }
 
+    /// <summary>
+    /// 초기화
+    /// </summary>
     public override void Initialize()
     {
         base.Initialize();

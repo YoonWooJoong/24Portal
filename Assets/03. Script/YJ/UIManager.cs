@@ -7,6 +7,11 @@ public class UIManager : MonoBehaviour
     private const string UIPrefabPath = "UI/";
     private Dictionary<string, BaseUI> activeUIs = new Dictionary<string, BaseUI>();
 
+    /// <summary>
+    /// UI없으면 만들어서 보여주거나 있으면 활성화 해서 보여줌
+    /// </summary>
+    /// <typeparam name="T"> BaseUI </typeparam>
+    /// <returns></returns>
     public T ShowUI<T>() where T : BaseUI
     {
         string uiName = typeof(T).Name;
@@ -38,6 +43,10 @@ public class UIManager : MonoBehaviour
         return uiComponent;
     }
 
+    /// <summary>
+    /// UI숨기기
+    /// </summary>
+    /// <typeparam name="T">BaseUI</typeparam>
     public void HideUI<T>() where T : BaseUI
     {
         string uiName = typeof (T).Name;

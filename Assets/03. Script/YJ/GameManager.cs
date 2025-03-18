@@ -69,7 +69,6 @@ public class GameManager : MonoBehaviour
 
     public void PlayerCreate()
     {
-        Debug.Log("캐릭터 생성");
         if (playerPrefab != null)
             Instantiate(playerPrefab, startPosition.transform.position, Quaternion.identity);
         else
