@@ -63,6 +63,10 @@ public class Player : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// 캐릭터 피격시 호출
+    /// </summary>
+    /// <param name="damage">입힐 데미지</param>
     public void TakeDamage(float damage)
     {
         if(_coroutine != null)
@@ -85,6 +89,7 @@ public class Player : MonoBehaviour
         //죽었을 때 스테이지 초기화 등...
     }
 
+    //피격시 카메라 흔들림
     private IEnumerator HitEffect()
     {
         float duration = 0f;
