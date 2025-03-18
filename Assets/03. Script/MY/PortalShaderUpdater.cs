@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class PortalShaderUpdater : MonoBehaviour
 {
-    public Transform portalCenter; // 포탈의 Transform
+    public Transform portalCenter; 
     private Renderer rend;
 
     void Start()
     {
         rend = GetComponentInChildren<Renderer>();
     }
-
+    /// <summary>
+    /// 매 프레임마다 쉐이더에 포탈 정보를 업데이트
+    /// </summary>
     void Update()
     {
         if (portalCenter != null)
