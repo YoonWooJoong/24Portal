@@ -138,6 +138,7 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started && isLock)
         {
+            //GameManager.Instance.soundManager.PlaySFX(0);
             portalSpawner.SpawnPortalA();
         }
     }
@@ -146,6 +147,7 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started && isLock)
         {
+            //GameManager.Instance.soundManager.PlaySFX(0);
             portalSpawner.SpawnPortalB();
         }
     }

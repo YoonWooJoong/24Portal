@@ -7,5 +7,6 @@ public class MainSceneManager : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.uiManager.ShowUI<MainUI>();
+        Cursor.lockState = CursorLockMode.None;
     }
 }

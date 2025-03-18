@@ -6,6 +6,10 @@ public class Elevator : MonoBehaviour
 {
     public Animator anim;
     bool isIn;
+
+    /// <summary>
+    /// 열리는 프로퍼티
+    /// </summary>
     public bool IsIn
     {
         get { return isIn; }
