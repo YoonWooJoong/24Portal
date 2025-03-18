@@ -32,6 +32,7 @@ public class AchieveManager : MonoBehaviour
         achievementDic.Add("FirstClear", new Achievement("첫걸음", "첫번째 맵을 클리어 했다", false));
         achievementDic.Add("GetItem", new Achievement("돌잔치", "처음으로 물건을 집었다", false));
         achievementDic.Add("Teleport", new Achievement("순간이동", "포탈을 이용하여 순간이동을 했다", false));
+        achievementDic.Add("Die", new Achievement("첫죽음", "죽었다!", false));
     }
 
     /// <summary>

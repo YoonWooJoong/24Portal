@@ -80,10 +80,11 @@ public class Player : MonoBehaviour
         //죽었을 때 스테이지 초기화 등...
         if(isDie) { return; }
         isDie = true;
-        _camera.transform.DOMove(_camera.transform.position + new Vector3(0, -1.0f), 1.5f).SetEase(Ease.OutElastic);
-        _camera.transform.DORotate(new Vector3(0, 0, 90), 1.0f).SetEase(Ease.OutBounce);
+        GameManager.Instance.achieveManager.UnLockAchievement("Die");
+        _camera.transform.DOMove(_camera.transform.position + new Vector3(0, -1.0f), 1.5f).SetEase(Ease.OutElastic); // 중간에 한 번 튕기기
+        _camera.transform.DORotate(new Vector3(0, 0, 90), 1.0f).SetEase(Ease.OutBounce); // 끝날 때 튕기기
 
-        Invoke("RestartGame", 2f);
+        Invoke("RestartGame", 2f); //2초 뒤 재시작
     }
 
     private void RestartGame()
