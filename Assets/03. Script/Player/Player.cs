@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -25,6 +24,10 @@ public class Player : MonoBehaviour
     private float currentHitTime;
     public float hitGap;
 
+    private Camera _camera;
+    private Vector3 _originCameraPos;
+    private Coroutine _coroutine;
+
     private void Awake()
     {
         if(instance == null)
@@ -34,6 +37,9 @@ public class Player : MonoBehaviour
 
         curHP = maxHp;
         currentHitTime = Time.time;
+
+        _camera = Camera.main;
+        _originCameraPos = _camera.transform.localPosition;
     }
 
     // Start is called before the first frame update
@@ -59,6 +65,13 @@ public class Player : MonoBehaviour
     
     public void TakeDamage(float damage)
     {
+        if(_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+        }
+
+        _coroutine = StartCoroutine(HitEffect());
+
         curHP -= damage;
         currentHitTime = Time.time;
         if (curHP <= 0)
@@ -70,6 +83,28 @@ public class Player : MonoBehaviour
     public void Die()
     {
         //죽었을 때 스테이지 초기화 등...
+    }
+
+    private IEnumerator HitEffect()
+    {
+        float duration = 0f;
+
+        while(true)
+        {
+            if (duration > 0.5f)
+                break;
+
+            float x = Random.Range(-0.2f, 0.2f);
+            float y = Random.Range(-0.2f, 0.2f);
+
+            _camera.transform.localPosition = _originCameraPos + new Vector3(x, y);
+
+            duration += Time.deltaTime;
+
+            yield return null;
+        }
+
+        _camera.transform.localPosition = _originCameraPos;
     }
 
 }
