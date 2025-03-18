@@ -5,18 +5,33 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    private static Player instance;
+    public static Player Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new GameObject("Player").AddComponent<Player>();
+            }
+            return instance;
+        }
+    }
     public PlayerController controller;
     public float curHP;
     public float maxHp;
     public float recoveryRate;
 
-    public float currentHitTime;
+    private float currentHitTime;
     public float hitGap;
-
-    public Image hitImage;
 
     private void Awake()
     {
+        if(instance == null)
+            instance = this;
+        else if(instance != this)
+            Destroy(gameObject);
+
         curHP = maxHp;
         currentHitTime = Time.time;
     }
@@ -31,7 +46,7 @@ public class Player : MonoBehaviour
     {
         if (hitGap < Time.time - currentHitTime)
         {
-            if(curHP <= maxHp)
+            if(curHP < maxHp)
             {
                 curHP += recoveryRate * Time.deltaTime;
             }
@@ -45,6 +60,7 @@ public class Player : MonoBehaviour
     public void TakeDamage(float damage)
     {
         curHP -= damage;
+        currentHitTime = Time.time;
         if (curHP <= 0)
         {
             Die();
@@ -56,8 +72,4 @@ public class Player : MonoBehaviour
         //죽었을 때 스테이지 초기화 등...
     }
 
-    private void HitImageColorChange()
-    {
-        hitImage.color = new Color(1, 0, 0, (1 - curHP / maxHp) * 0.5f);
-    }
 }

@@ -31,11 +31,6 @@ public class PlayerController : MonoBehaviour
 
     private bool isLock;
 
-    /// <summary>
-    /// 좌 혹은 우 클릭시 실행
-    /// </summary>
-    public Action portalAction;
-
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
