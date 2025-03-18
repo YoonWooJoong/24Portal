@@ -1,21 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Player : MonoBehaviour
 {
-    private static Player instance;
-    public static Player Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = new GameObject("Player").AddComponent<Player>();
-            }
-            return instance;
-        }
-    }
     public PlayerController controller;
     public float curHP;
     public float maxHp;
@@ -28,13 +17,10 @@ public class Player : MonoBehaviour
     private Vector3 _originCameraPos;
     private Coroutine _coroutine;
 
+    public bool isDie = false;
+
     private void Awake()
     {
-        if(instance == null)
-            instance = this;
-        else if(instance != this)
-            Destroy(gameObject);
-
         curHP = maxHp;
         currentHitTime = Time.time;
 
@@ -50,6 +36,9 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (isDie)
+            return;
+
         if (hitGap < Time.time - currentHitTime)
         {
             if(curHP < maxHp)
@@ -69,6 +58,8 @@ public class Player : MonoBehaviour
     /// <param name="damage">입힐 데미지</param>
     public void TakeDamage(float damage)
     {
+        if (isDie) return;
+
         if(_coroutine != null)
         {
             StopCoroutine(_coroutine);
@@ -87,6 +78,18 @@ public class Player : MonoBehaviour
     public void Die()
     {
         //죽었을 때 스테이지 초기화 등...
+        if(isDie) { return; }
+        isDie = true;
+        GameManager.Instance.achieveManager.UnLockAchievement("Die");
+        _camera.transform.DOMove(_camera.transform.position + new Vector3(0, -1.0f), 1.5f).SetEase(Ease.OutElastic); // 중간에 한 번 튕기기
+        _camera.transform.DORotate(new Vector3(0, 0, 90), 1.0f).SetEase(Ease.OutBounce); // 끝날 때 튕기기
+
+        Invoke("RestartGame", 2f); //2초 뒤 재시작
+    }
+
+    private void RestartGame()
+    {
+        GameManager.Instance.stageChanger.RestartScene();
     }
 
     //피격시 카메라 흔들림

@@ -70,6 +70,7 @@ public class Interaction : MonoBehaviour
         {
             if(!IsPicking)
             {
+                GameManager.Instance.achieveManager.UnLockAchievement("GetItem");
                 IsPicking = true;
             } 
             else //물건을 놓을 땐 플레이어 속도를 이용해서 날릴 수 있도록 함

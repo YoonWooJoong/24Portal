@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
 
     private bool isLock;
 
+    private Player player;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -44,18 +46,20 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         moveSpeed = walkSpeed;
         isLock = true;
+
+        player = GetComponent<Player>();
     }
 
     private void FixedUpdate()
     {
-        if (!isLock)
+        if (!isLock || player.isDie)
             return;
         Move();
     }
 
     private void LateUpdate()
     {
-        if (!isLock)
+        if (!isLock || player.isDie)
             return;
         Look();
     }
