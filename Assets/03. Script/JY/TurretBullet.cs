@@ -25,7 +25,7 @@ public class TurretBullet : MonoBehaviour
                 Vector3 knockbackDirection = collision.transform.position - transform.position;
                 knockbackDirection.y = 0;
                 playerRb.AddForce(knockbackDirection.normalized * 1f, ForceMode.Impulse);// 플레이어 밀어내기 1f=넉백강도
-
+                collision.gameObject.GetComponent<Player>().TakeDamage(1f);
                 Destroy(gameObject);
             }
             else
