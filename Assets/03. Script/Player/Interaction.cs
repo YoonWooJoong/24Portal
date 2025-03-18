@@ -51,7 +51,7 @@ public class Interaction : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if(IsPicking)
+        if(IsPicking) //집은 물건의 위치 이동
         {
             detectedItem.transform.position = _camera.transform.position + _camera.transform.rotation * (1.5f * Vector3.forward);
             detectedItem.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -68,12 +68,11 @@ public class Interaction : MonoBehaviour
 
         if (context.phase == InputActionPhase.Started)
         {
-            //아이템 상호작용 //큐브 들기 등...
             if(!IsPicking)
             {
                 IsPicking = true;
             } 
-            else
+            else //물건을 놓을 땐 플레이어 속도를 이용해서 날릴 수 있도록 함
             {
                 IsPicking = false;
                 detectedItem.GetComponent<Rigidbody>().velocity = gameObject.GetComponent<Rigidbody>().velocity;
