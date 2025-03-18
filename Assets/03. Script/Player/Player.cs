@@ -58,6 +58,7 @@ public class Player : MonoBehaviour
     /// <param name="damage">입힐 데미지</param>
     public void TakeDamage(float damage)
     {
+        GameManager.Instance.soundManager.PlaySFX(2);
         if (isDie) return;
 
         if(_coroutine != null)

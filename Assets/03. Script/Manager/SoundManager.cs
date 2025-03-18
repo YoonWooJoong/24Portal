@@ -32,6 +32,12 @@ public class SoundManager : MonoBehaviour
     {
         bgms.Add(Resources.Load("Sound/24Portal_BGM", typeof(AudioClip)) as AudioClip);
         sfxs.Add(Resources.Load("Sound/ShootSFX", typeof(AudioClip)) as AudioClip);
+        sfxs.Add(Resources.Load("Sound/FindPlayerSFX", typeof(AudioClip)) as AudioClip);
+        sfxs.Add(Resources.Load("Sound/HitSFX", typeof(AudioClip)) as AudioClip);
+        sfxs.Add(Resources.Load("Sound/achievement", typeof(AudioClip)) as AudioClip);
+        sfxs.Add(Resources.Load("Sound/Glass", typeof(AudioClip)) as AudioClip);
+
+
         audioBGM = new GameObject("BGM").AddComponent<AudioSource>();
         audioSfx = new GameObject("SFX").AddComponent<AudioSource>();
         audioBGM.transform.SetParent(transform);

@@ -80,7 +80,7 @@ public class AchieveManager : MonoBehaviour
             achieveName.text = name;
             achieveDescription.text = achievementDic[name]._description;
             Debug.Log(achieveDescription.text);
-
+            GameManager.Instance.soundManager.PlaySFX(3);
             StartCoroutine(UpUI());
         }
     }

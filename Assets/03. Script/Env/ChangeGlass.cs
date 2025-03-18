@@ -16,6 +16,7 @@ public class ChangeGlass : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
+            GameManager.Instance.soundManager.PlaySFX(4);
             originalGlass.SetActive(false);
             secondGlass.SetActive(true);
 

@@ -74,7 +74,7 @@ public class Turret : MonoBehaviour
 
         if (angle < 45f)  // 90도의 절반인 45도를 기준으로 회전
         {
-
+            
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             InAngle = true;
