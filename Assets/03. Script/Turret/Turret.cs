@@ -36,19 +36,7 @@ public class Turret : MonoBehaviour
                 TrackPlayer();
                 AttackPlayer();
             }
-
-            else
-            {
-                // 공격 범위 밖이면 돌아가지 않음
-                Debug.Log("플레이어가 공격 범위 밖에 있음");
-            }
         }
-        else
-        {
-            // 플레이어가 감지 범위 밖에 있을 때
-            Debug.Log("플레이어 들어왔다 나감");
-        }
-
     }
    
 
@@ -59,7 +47,6 @@ public class Turret : MonoBehaviour
         {
             player = other.transform;
             playerInRange = true;
-            Debug.Log("플레이어 들어옴");
         }
 
     }
@@ -70,7 +57,6 @@ public class Turret : MonoBehaviour
         {
             playerInRange = false;
             player = null;
-            Debug.Log("플레이어 나감");
         }
     }
 
@@ -91,13 +77,11 @@ public class Turret : MonoBehaviour
 
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-           // Debug.Log($"플레이어 방향: {direction}, 감지 각도: {angle}");
             InAngle = true;
         }
         else
         {
             // 플레이어가 터렛의 앞 90도 범위 밖에 있을 때는 회전하지 않음
-            Debug.Log("플레이어가 앞 90도 범위 밖에 있음");
             InAngle = false;
         }
     }
@@ -119,13 +103,7 @@ public class Turret : MonoBehaviour
                 ShootBullet();
                 attackTimer = 0f;  // 공격 후 타이머 리셋
             }
-            else
-            {
-                // 플레이어가 가려져 있으면 공격하지 않음
-                Debug.Log("플레이어가 가려져 공격 불가");
-            }
         }
-      //  Debug.Log($"현재 attackTimer: {attackTimer}, attackCooldown: {attackCooldown}");
     }
 
     /// <summary>
@@ -138,13 +116,6 @@ public class Turret : MonoBehaviour
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         rb.AddForce(gunBarrel.forward * bulletForce, ForceMode.VelocityChange);  // 총알 발사
     }
-   // void OnDrawGizmos()
-   // {
-   //     // 감지 범위를 빨간색 원으로 표시
-   //     Gizmos.color = Color.red;
-   //     Gizmos.DrawWireSphere(transform.position, detectionRange); // 감지 범위 원 그리기
-   // }
-
     /// <summary>
     /// 플레이어와 터렛 사이에 장애물이 있는지 확인하는 함수
     /// </summary>
@@ -173,7 +144,6 @@ public class Turret : MonoBehaviour
             isKnockedOver = true;  // 터렛이 넘어짐
             attackTimer = 0f;  // 공격 타이머 리셋
             InAngle = false;  // 공격을 멈춤
-            Debug.Log("충돌함");
 
             // Rigidbody의 물리적인 힘을 추가하여 넘어지게 만들기
             rb.AddForce(Vector3.up * 0.1f, ForceMode.Impulse);  // 위로 힘을 줘서 약간 넘어지게

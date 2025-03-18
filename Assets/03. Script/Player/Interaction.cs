@@ -37,8 +37,7 @@ public class Interaction : MonoBehaviour
 
             Ray ray = _camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, maxCheckDistance, layerMask))
+            if (Physics.Raycast(ray, out hit, maxCheckDistance, layerMask, QueryTriggerInteraction.Ignore))
             {
                 detectedItem = hit.collider.gameObject;
             }

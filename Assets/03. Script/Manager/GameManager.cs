@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        playerPrefab = Resources.Load<GameObject>("Player");
+        playerPrefab = Resources.Load<GameObject>("Player/Player");
         StageChanger changerObject = new GameObject("StageChanger").AddComponent<StageChanger>();
         UIManager uIObject = new GameObject("UIManager").AddComponent<UIManager>();
         SoundManager soundObject = new GameObject("SoundManager").AddComponent<SoundManager>();

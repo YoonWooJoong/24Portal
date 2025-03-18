@@ -2023,9 +2023,8 @@ MonoBehaviour:
   curHP: 20
   maxHp: 20
   recoveryRate: 5
-  currentHitTime: 0
   hitGap: 5
-  hitImage: {fileID: 3501516103608887995, guid: e62cf85cfff1487409f6901cce210d0b, type: 3}
+  isDie: 0
 --- !u!114 &4723201176119428879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2039,7 +2038,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 5
-  runSpeed: 10
+  runSpeed: 6
   jumpPower: 200
   groundLayerMask:
     serializedVersion: 2

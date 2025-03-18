@@ -30,8 +30,8 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     public void Init()
     {
-        bgms.Add(Resources.Load("24Portal_BGM", typeof(AudioClip)) as AudioClip);
-        sfxs.Add(Resources.Load("ShootSFX", typeof(AudioClip)) as AudioClip);
+        bgms.Add(Resources.Load("Sound/24Portal_BGM", typeof(AudioClip)) as AudioClip);
+        sfxs.Add(Resources.Load("Sound/ShootSFX", typeof(AudioClip)) as AudioClip);
         audioBGM = new GameObject("BGM").AddComponent<AudioSource>();
         audioSfx = new GameObject("SFX").AddComponent<AudioSource>();
         audioBGM.transform.SetParent(transform);
