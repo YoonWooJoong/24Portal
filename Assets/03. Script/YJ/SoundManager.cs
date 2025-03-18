@@ -18,7 +18,7 @@ public class SoundManager : MonoBehaviour
         set { bgmSoundScale = Mathf.Clamp01(value); }
     }
 
-    private float sfxSoundScale;
+    private float sfxSoundScale =1;
     public float SfxSoundScale
     {
         get { return sfxSoundScale; }
@@ -31,6 +31,7 @@ public class SoundManager : MonoBehaviour
     public void Init()
     {
         bgms.Add(Resources.Load("24Portal_BGM", typeof(AudioClip)) as AudioClip);
+        sfxs.Add(Resources.Load("ShootSFX", typeof(AudioClip)) as AudioClip);
         audioBGM = new GameObject("BGM").AddComponent<AudioSource>();
         audioSfx = new GameObject("SFX").AddComponent<AudioSource>();
         audioBGM.transform.SetParent(transform);
@@ -61,6 +62,7 @@ public class SoundManager : MonoBehaviour
     /// <param name="index"></param>
     public void PlaySFX(int index)
     {
+        audioSfx.clip = sfxs[index];
         audioSfx.PlayOneShot(sfxs[index], SfxSoundScale);
     }
 
