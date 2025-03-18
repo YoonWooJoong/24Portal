@@ -12,21 +12,30 @@ public class PortalSpawner : MonoBehaviour
     public LayerMask portalSpawnLayer;
 
     public GameObject portalA;
-    public GameObject portalB;   
+    public GameObject portalB;
 
-    
 
+    /// <summary>
+    /// Portal Spawn Layer에서 마우스 커서의 레이캐스트 충돌 지점에 포탈 A를 생성
+    /// </summary>
     public void SpawnPortalA()
     {
         SpawnPortal(ref portalA, portalAPrefab);
     }
-
+    /// <summary>
+    /// Portal Spawn Layer에서 마우스 커서의 레이캐스트 충돌 지점에 포탈 B를 생성
+    /// </summary>
     public void SpawnPortalB()
     {
         SpawnPortal(ref portalB, portalBPrefab);
     }
 
-
+    /// <summary>
+    /// Portal Spawn Layer에서 마우스 커서의 레이캐스트 충돌 지점에 포탈 프리팹을 생성합니다.
+    /// 이미 포탈이 존재하면 기존 포탈을 대체합니다.
+    /// </summary>
+    /// <param name="portal">생성된 포탈을 저장할 GameObject에 대한 참조</param>
+    /// <param name="prefab">인스턴스화할 포탈 프리팹</param>
     public void SpawnPortal(ref GameObject portal, GameObject prefab)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -65,12 +74,14 @@ public class PortalSpawner : MonoBehaviour
         }
         else
         {
-            Debug.Log("포탈을 생성할 수 있는 위치를 찾지 못했습니다.");
+            
         }
     
         
     }
-
+    /// <summary>
+    /// 포탈 A와 포탈 B를 서로의 "otherPortal" 참조를 설정하여 연결.
+    /// </summary>
     void ConnectPortals()
     {       
         if (portalA == null || portalB == null) return;
@@ -93,7 +104,7 @@ public class PortalSpawner : MonoBehaviour
             portalBScript.otherPortal = portalA.transform;
 
             
-            Debug.Log("포탈 A와 B가 연결되었습니다.");
+            
         }
     }
 }
