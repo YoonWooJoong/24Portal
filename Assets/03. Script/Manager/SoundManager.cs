@@ -42,7 +42,9 @@ public class SoundManager : MonoBehaviour
         audioSfx = new GameObject("SFX").AddComponent<AudioSource>();
         audioBGM.transform.SetParent(transform);
         audioSfx.transform.SetParent(transform);
+        audioBGM.loop = true;
         this.gameObject.AddComponent<AudioListener>();
+
     }
     /// <summary>
     /// 배경음악 재생
