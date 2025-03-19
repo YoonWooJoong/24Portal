@@ -23,9 +23,31 @@
   - 기능 개발 및 상호 협력
   - 최종 마무리 및 테스트
 
+## 🎛️조작 방법
+- 움직임 : W A S D 로 이동할수 있습니다.
+- 마우스를 움직이는 방향으로 캐릭터가 바라봅니다.
+- 포탈 생성 : 마우스 왼쪽클릭, 오른쪽 클릭
+- 물건 잡기 : 키보드 E
+- 달리기 : 왼쪽 Shift
+- 게임중 UI클릭 : ESC 버튼을 누르면 마우스가 나오고 다시한번더 누르면 사라집니다.
+
 ## 🎥 시연 영상
 
 [![Everything Is AWESOME](https://img.youtube.com/vi/Y6DjyHaEpKI/0.jpg)](https://www.youtube.com/watch?v=Y6DjyHaEpKI "24Portal")
+
+## 🖼️ 프로젝트 화면
+### 게임 시작 화면
+![Image](https://github.com/user-attachments/assets/a205ecd0-140e-4036-8099-0fe3c37dd84d)
+
+### 설정 화면
+![image](https://github.com/user-attachments/assets/1365c77a-f757-4b88-9e4e-c64a1d1531ce)
+
+### 맵선택 화면
+![image](https://github.com/user-attachments/assets/b2076934-2d55-48f9-a19b-6170bdba82ce)
+
+### 플레이 화면
+![image](https://github.com/user-attachments/assets/eb9ab0b5-9e11-4b63-8a3c-5d483a010f1c)
+
 
 ## 🎮 주요 기능
 
